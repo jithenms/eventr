@@ -1,59 +1,39 @@
 type Query {
-    getStudents: [User]
-    getStudent(authId: String): User
-    getTeachers: [User]
-    getTeacher(authId: String): User
-    getEvents: [Event]
-    getEvent(eventId: String): Event
-    getEventsByTeacher(id: String): [Event]
-    getLeaderboard(leaderboardInput: LeaderboardInput!): [User]
+    student(authId: String): Student
+    teacher(authId: String): Teacher
+    schoolEvents(schoolId: String): Event
+    event(schoolId: String, eventId: String): Event
+    leaderboard(schoolId: String!, quarter: Int!): [Student]
 }
 
 type Mutation {
-    registerUser(registerUserInput: RegisterUserInput!): User
-    deleteStudent(userId: String): String
-    deleteTeacher(userId: String): String
+    createAccount(createAccountInput: CreateAccountInput!): School
+    createStudent(createStudentInput: CreateStudentInput!): Student
     createEvent(createEventInput: CreateEventInput!): Event
-    joinEvent(joinEventInput: JoinEventInput!): Event
-    leaveEvent(leaveEventInput: LeaveEventInput!): Event
-    denyStudentRequest(denyStudentRequestInput: DenyStudentRequestInput!): Event
-    acceptStudentRequest(acceptStudentRequestInput: AcceptStudentRequestInput!): Event
-    deleteEvent(eventId: String): String
-    addPoints(addPointsInput: AddPointsInput!): User
-    deleteAllEvents: String
-#    createClassroom(createClassroomInput: CreateClassroomInput!): Classroom
-#    joinClassroom(joinClassroomInput: JoinClassroomInput!): JoinClassroomOutput
-#    leaveClassroom(leaveClassroomInput: LeaveClassroomInput!): LeaveClassroomOutput
-#    requestPass(requestPassInput: CreatePassInput!): RequestPassOutput
-#    createPass(createPassInput: CreatePassInput!): Pass
-#    revokePass(passId: ID!): Pass
+    joinEvent(eventId: String, studentId: String): Event
+    acceptEventRequest(eventId: String!, studentId: String!): Event
+    leaveEvent(eventId: String!, studentId: String!): Event
 }
 
-input AcceptStudentRequestInput {
-    eventId: String
-    studentId: String
-}
-
-input DenyStudentRequestInput {
-    eventId: String
-    studentId: String
-}
-
-input AddPointsInput {
-    studentId: String
-    points: Int
-}
-
-input RegisterUserInput {
+input CreateAccountInput {
+    schoolName: String
     firstName: String
     lastName: String
     email: String
     password: String
-    role: UserRole
-    grade: Int
 }
 
+input CreateStudentInput {
+    schoolCode: Int
+    firstName: String
+    lastName: String
+    email: String
+    password: String
+}
+
+
 input CreateEventInput {
+    schoolId: String
     teacherId: String
     title: String
     description: String
@@ -63,14 +43,60 @@ input CreateEventInput {
     quarter: Int
 }
 
-input LeaveEventInput {
-    eventId: String
-    studentId: String
+type Teacher {
+    id: String
+    authId: String
+    school: School
+    firstName: String
+    lastName: String
+    email: String
+    events: [Event]
+    createdAt: String
+    updatedAt: String
 }
 
-input JoinEventInput {
-    eventId: String
-    studentId: String
+type Student {
+    id: String
+    school: School
+    authId: String
+    firstName: String
+    lastName: String
+    email: String
+    grade: Int
+    joinedEvents: [Event]
+    acceptedEvents: [Event]
+    points: Int
+    q1points: Int
+    q2points: Int
+    q3points: Int
+    q4points: Int
+    createdAt: String
+    updatedAt: String
+}
+
+
+type Event {
+    id: String
+    school: School
+    teacher: Teacher
+    title: String
+    description: String
+    points: Int
+    time: String
+    date: String
+    quarter: Int
+    joinedStudents: [Student]
+    acceptedStudents: [Student]
+    createdAt: String
+    updatedAt: String
+}
+
+type School {
+    id: String
+    name: String
+    code: Int
+    createdAt: String
+    updatedAt: String
 }
 
 enum UserRole {
@@ -78,41 +104,7 @@ enum UserRole {
     TEACHER
 }
 
-type User {
-    id: String
-    authId: String
-    firstName: String
-    lastName: String
-    email: String
-    grade: Int
-    role: UserRole
-    joinedEvents: [Event]
-    requestedEvents: [Event]
-    points: Int
-    q1points: Int
-    q2points: Int
-    q3points: Int
-    q4points: Int
-    createdAt: String
-}
-
-type Event {
-    id: String
-    teacherId: String
-    teacher: User
-    title: String
-    description: String
-    points: Int
-    time: String
-    date: String
-    quarter: Int
-    studentListLength: Int
-    studentIdList: [User]
-    studentIdRequests: [User]
-    createdAt: String
-}
-
-input LeaderboardInput {
-    quarter: Int
-    sortBy: String
+enum StudentEventStatus {
+    JOINED
+    ACCEPTED
 }
