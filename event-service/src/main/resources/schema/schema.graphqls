@@ -11,7 +11,8 @@ type Query {
 }
 
 type Mutation {
-    createAccount(createAccountInput: CreateAccountInput!): School
+    createSchool(createSchoolInput: CreateSchoolInput!): School
+    createTeacher(createTeacherInput: CreateTeacherInput!): Teacher
     createStudent(createStudentInput: CreateStudentInput!): Student
     createEvent(createEventInput: CreateEventInput!): Event
     joinEvent(eventId: String, studentId: String): Event
@@ -19,8 +20,12 @@ type Mutation {
     leaveEvent(eventId: String!, studentId: String!): Event
 }
 
-input CreateAccountInput {
+input CreateSchoolInput {
     schoolName: String
+}
+
+input CreateTeacherInput {
+    schoolCode: Int
     firstName: String
     lastName: String
     email: String

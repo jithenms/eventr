@@ -92,13 +92,13 @@ public class Converters {
         return event;
     }
 
-    public SchoolEntity toEntity(CreateAccountInput input) {
+    public SchoolEntity toEntity(CreateSchoolInput input) {
         SchoolEntity school = new SchoolEntity();
         school.setName(input.getSchoolName());
         return school;
     }
 
-    public TeacherEntity toEntity(CreateAccountInput input, SchoolEntity schoolEntity) {
+    public TeacherEntity toEntity(CreateTeacherInput input, SchoolEntity schoolEntity) {
         TeacherEntity teacher = new TeacherEntity();
         teacher.setSchool(schoolEntity);
         teacher.setFirstName(input.getFirstName());

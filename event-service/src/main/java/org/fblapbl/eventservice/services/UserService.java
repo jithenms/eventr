@@ -34,21 +34,6 @@ public class UserService {
         this.authService = authService;
     }
 
-    public List<Student> getAllStudents() {
-        List<StudentEntity> studentEntities = studentRepository.findAll();
-        return studentEntities.stream().map(converters::toGraphQLType).collect(Collectors.toList());
-    }
-
-    public List<School> getAllSchools() {
-        List<SchoolEntity> schoolEntities = schoolRepository.findAll();
-        return schoolEntities.stream().map(converters::toGraphQLType).collect(Collectors.toList());
-    }
-
-    public List<Teacher> getAllTeachers() {
-        List<TeacherEntity> teacherEntities = teacherRepository.findAll();
-        return teacherEntities.stream().map(converters::toGraphQLType).collect(Collectors.toList());
-    }
-
     public Student getStudent(String studentId) {
         StudentEntity studentEntity = studentRepository.findById(UUID.fromString(studentId)).orElseThrow();
         return converters.toGraphQLType(studentEntity);
@@ -73,13 +58,18 @@ public class UserService {
         return studentsResponse;
     }
 
-    public School createAccount(CreateAccountInput createAccountInput) {
-        SchoolEntity schoolEntity = converters.toEntity(createAccountInput);
+    public School createSchool(CreateSchoolInput createSchoolInput) {
+        SchoolEntity schoolEntity = converters.toEntity(createSchoolInput);
         schoolRepository.save(schoolEntity);
-        TeacherEntity teacherEntity = converters.toEntity(createAccountInput, schoolEntity);
-        teacherRepository.save(teacherEntity);
-        authService.createAccount(teacherEntity.getId(), createAccountInput.getEmail(), createAccountInput.getPassword(), UserRole.TEACHER);
         return converters.toGraphQLType(schoolEntity);
+    }
+
+    public Teacher createTeacher(CreateTeacherInput createTeacherInput) {
+        SchoolEntity schoolEntity = schoolRepository.findByCode(createTeacherInput.getSchoolCode());
+        TeacherEntity teacherEntity = converters.toEntity(createTeacherInput, schoolEntity);
+        teacherRepository.save(teacherEntity);
+        authService.createAccount(teacherEntity.getId(), createTeacherInput.getEmail(), createTeacherInput.getPassword(), UserRole.TEACHER);
+        return converters.toGraphQLType(teacherEntity);
     }
 
 

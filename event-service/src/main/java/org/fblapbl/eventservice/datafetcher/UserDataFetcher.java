@@ -7,7 +7,6 @@ import com.netflix.graphql.dgs.InputArgument;
 import org.fblapbl.eventservice.graphql.types.*;
 import org.fblapbl.eventservice.services.UserService;
 
-import javax.transaction.Transactional;
 import java.util.List;
 
 @DgsComponent
@@ -16,21 +15,6 @@ public class UserDataFetcher {
 
     public UserDataFetcher(UserService userService) {
         this.userService = userService;
-    }
-
-    @DgsQuery
-    public List<Student> allStudents() {
-        return userService.getAllStudents();
-    }
-
-    @DgsQuery
-    public List<School> allSchools() {
-        return userService.getAllSchools();
-    }
-
-    @DgsQuery
-    public List<Teacher> allTeachers() {
-        return userService.getAllTeachers();
     }
 
     @DgsQuery
@@ -49,13 +33,16 @@ public class UserDataFetcher {
     }
 
     @DgsMutation
-    @Transactional
-    public School createAccount(@InputArgument CreateAccountInput createAccountInput) {
-        return userService.createAccount(createAccountInput);
+    public School createSchool(@InputArgument CreateSchoolInput createSchoolInput) {
+        return userService.createSchool(createSchoolInput);
     }
 
     @DgsMutation
-    @Transactional
+    public Teacher createTeacher(@InputArgument CreateTeacherInput createTeacherInput) {
+        return userService.createTeacher(createTeacherInput);
+    }
+
+    @DgsMutation
     public Student createStudent(@InputArgument CreateStudentInput createStudentInput) {
         return userService.createStudent(createStudentInput);
     }
