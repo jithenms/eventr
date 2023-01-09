@@ -50,7 +50,6 @@ fi
 echo Installing dependencies...
 cd ../event-app
 npm install
-Run frontend
 echo Running frontend...
 npm start
 echo Done!
