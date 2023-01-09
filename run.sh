@@ -1,5 +1,11 @@
 #! /bin/bash
 
+echo Checking if brew is installed...
+if ! command -v brew > /dev/null; then
+  echo Installing brew...
+  /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
+fi
+
 echo Installing PostgreSQL...
 if [ ! -d "/usr/local/pgsql" ]; then
 brew install postgresql

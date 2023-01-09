@@ -1,8 +1,9 @@
 echo Installing PostgreSQL...
 if not exist "C:\Program Files\PostgreSQL" (
-    powershell Invoke-WebRequest "https://get.enterprisedb.com/postgresql/postgresql-20.5-1-windows-x64.exe" -OutFile "postgresql-installer.exe"
-    start /wait postgresql-installer.exe --silent
-    del postgresql-installer.exe
+    if not exist "%SystemRoot%\system32\WindowsPowerShell\v1.0\powershell.exe" (
+        @powershell -NoProfile -ExecutionPolicy Bypass -Command "iex ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))" && SET "PATH=%PATH%;%ALLUSERSPROFILE%\chocolatey\bin"
+    )
+    choco install postgresql --version=20.5.1 --yes
     net start postgresql
 )
 
@@ -29,19 +30,24 @@ if not exist "C:\ProgramData\PostgreSQL\pgsql\data\eventdb" (
 
 echo Installing Java 17...
 if not exist "C:\ProgramData\Oracle\Java" (
-    powershell Invoke-WebRequest "https://download.java.net/java/GA/jdk17/9/GPL/openjdk-17_windows-x64_bin.zip" -OutFile "jdk.zip"
-    powershell Expand-Archive jdk.zip "C:\ProgramData\Oracle\Java"
+    if not exist "%SystemRoot%\system32\WindowsPowerShell\v1.0\powershell.exe" (
+        @powershell -NoProfile -ExecutionPolicy Bypass -Command "iex ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))" && SET "PATH=%PATH%;%ALLUSERSPROFILE%\chocolatey\bin"
+    )
+    choco install openjdk --version=17 --yes
     setx PATH "%PATH%;C:\ProgramData\Oracle\Java\jdk-17\bin"
-    del jdk.zip
 )
 
 echo Running backend jar...
 cd event-service
-start /b java -jar target/event-service-1.0.0-SNAPSHOT.jar
+java -jar target/event-service-1.0.0-SNAPSHOT.jar
 
 echo Installing Node...
 if not exist "C:\Program Files\nodejs" (
-    powershell Invoke-WebRequest "https://nodejs.org/dist
+    if not exist "%SystemRoot%\system32\WindowsPowerShell\v1.0\powershell.exe" (
+        @powershell -NoProfile -ExecutionPolicy Bypass -Command "iex ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))" && SET "PATH=%PATH%;%ALLUSERSPROFILE%\chocolatey\bin"
+    )
+    choco install nodejs --yes
+)
 
 echo Installing dependencies...
 cd ../event-app
