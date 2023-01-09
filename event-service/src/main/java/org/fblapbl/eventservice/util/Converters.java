@@ -1,8 +1,8 @@
 package org.fblapbl.eventservice.util;
 
 import org.fblapbl.eventservice.entities.*;
-import org.fblapbl.eventservice.graphql.types.*;
 import org.fblapbl.eventservice.graphql.types.ParticipationStatus;
+import org.fblapbl.eventservice.graphql.types.*;
 import org.fblapbl.eventservice.repositories.EventRepository;
 import org.fblapbl.eventservice.repositories.ParticipationRepository;
 import org.springframework.stereotype.Component;
@@ -10,7 +10,6 @@ import org.springframework.stereotype.Component;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.TimeZone;
@@ -34,7 +33,7 @@ public class Converters {
         teacher.setLastName(teacherEntity.getLastName());
         teacher.setEmail(teacherEntity.getEmail());
         teacher.setCreatedAt(teacherEntity.getCreatedAt().toString());
-//      teacher.setUpdatedAt(teacherEntity.getUpdatedAt().toString());
+        teacher.setUpdatedAt(teacherEntity.getUpdatedAt().toString());
         return teacher;
     }
 
@@ -46,7 +45,7 @@ public class Converters {
         student.setLastName(studentEntity.getLastName());
         student.setEmail(studentEntity.getEmail());
         student.setGrade(studentEntity.getGrade());
-        List<ParticipationEntity> participationEntities = participationRepository.findAllByEventId(studentEntity.getId());
+        List<ParticipationEntity> participationEntities = participationRepository.findAllByStudentId(studentEntity.getId());
         student.setParticipations(participationEntities.stream().map(this::toGraphQLType).collect(Collectors.toList()));
         student.setPoints(studentEntity.getPoints());
         student.setQ1points(studentEntity.getQ1points());
@@ -54,7 +53,7 @@ public class Converters {
         student.setQ3points(studentEntity.getQ3points());
         student.setQ4points(studentEntity.getQ4points());
         student.setCreatedAt(studentEntity.getCreatedAt().toString());
-//      student.setUpdatedAt(studentEntity.getUpdatedAt().toString());
+        student.setUpdatedAt(studentEntity.getUpdatedAt().toString());
         return student;
     }
 
@@ -64,7 +63,7 @@ public class Converters {
         school.setName(schoolEntity.getName());
         school.setCode(schoolEntity.getCode());
         school.setCreatedAt(schoolEntity.getCreatedAt().toString());
-//      school.setUpdatedAt(schoolEntity.getUpdatedAt().toString());
+        school.setUpdatedAt(schoolEntity.getUpdatedAt().toString());
         return school;
     }
 
@@ -74,6 +73,8 @@ public class Converters {
         participation.setStudentId(participationEntity.getStudentId().toString());
         participation.setEventId(participationEntity.getEventId().toString());
         participation.setStatus(ParticipationStatus.valueOf(participationEntity.getStatus().name()));
+        participation.setCreatedAt(participationEntity.getCreatedAt().toString());
+        participation.setUpdatedAt(participationEntity.getUpdatedAt().toString());
         return participation;
     }
 
@@ -89,6 +90,8 @@ public class Converters {
         event.setQuarter(eventEntity.getQuarter());
         List<ParticipationEntity> participationEntities = participationRepository.findAllByEventId(eventEntity.getId());
         event.setParticipations(participationEntities.stream().map(this::toGraphQLType).collect(Collectors.toList()));
+        event.setCreatedAt(eventEntity.getCreatedAt().toString());
+        event.setUpdatedAt(eventEntity.getUpdatedAt().toString());
         return event;
     }
 

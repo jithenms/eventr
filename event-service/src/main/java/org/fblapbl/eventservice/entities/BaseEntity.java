@@ -11,23 +11,25 @@ public class BaseEntity {
     @Column(name = "id", nullable = false)
     private UUID id;
 
-    @Column(name = "created_at")
+    @Column(name = "created_at", nullable = false, updatable = false)
     private Date createdAt;
 
-    @Column(name = "updated_at")
+    @Column(name = "updated_at", nullable = false)
     private Date updatedAt;
+
+    public BaseEntity() {
+    }
 
     @PrePersist
     protected void onCreate() {
-        createdAt = new Date();
+        this.createdAt = new Date();
+        this.updatedAt = this.createdAt;
     }
 
     @PreUpdate
     protected void onUpdate() {
-        updatedAt = new Date();
+        this.updatedAt = new Date();
     }
-
-    public BaseEntity() {}
 
     public UUID getId() {
         return id;
