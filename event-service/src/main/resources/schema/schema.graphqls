@@ -26,7 +26,7 @@ input CreateSchoolInput {
 }
 
 input CreateTeacherInput {
-    schoolCode: Int
+    schoolCode: String
     firstName: String
     lastName: String
     email: String
@@ -34,7 +34,7 @@ input CreateTeacherInput {
 }
 
 input CreateStudentInput {
-    schoolCode: Int
+    schoolCode: String
     firstName: String
     lastName: String
     email: String
@@ -56,7 +56,7 @@ input CreateEventInput {
 type School {
     id: String
     name: String
-    code: Int
+    code: String
     createdAt: String
     updatedAt: String
 }

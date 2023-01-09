@@ -1,12 +1,11 @@
 package org.fblapbl.eventservice.services;
 
-import com.google.firebase.auth.UserRecord;
 import org.fblapbl.eventservice.entities.SchoolEntity;
 import org.fblapbl.eventservice.entities.StudentEntity;
 import org.fblapbl.eventservice.entities.TeacherEntity;
 import org.fblapbl.eventservice.graphql.types.*;
-import org.fblapbl.eventservice.repositories.SchoolRepository;
 import org.fblapbl.eventservice.repositories.ParticipationRepository;
+import org.fblapbl.eventservice.repositories.SchoolRepository;
 import org.fblapbl.eventservice.repositories.StudentRepository;
 import org.fblapbl.eventservice.repositories.TeacherRepository;
 import org.fblapbl.eventservice.util.Converters;

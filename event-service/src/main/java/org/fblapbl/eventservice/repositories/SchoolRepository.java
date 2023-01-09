@@ -10,5 +10,5 @@ import java.util.UUID;
 @Repository
 public interface SchoolRepository extends JpaRepository<SchoolEntity, UUID> {
     @Query(nativeQuery = true, value = "SELECT * FROM school s WHERE s.code = :code")
-    SchoolEntity findByCode(Integer code);
+    SchoolEntity findByCode(String code);
 }
