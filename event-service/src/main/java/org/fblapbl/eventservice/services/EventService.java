@@ -18,10 +18,12 @@ public class EventService {
     private final StudentRepository studentRepository;
     private final EventRepository eventRepository;
     private final ParticipationRepository participationRepository;
+    private final TeacherRepository teacherRepository;
 
 
-    public EventService(Converters converters, SchoolRepository schoolRepository, StudentRepository studentRepository, EventRepository eventRepository, ParticipationRepository participationRepository) {
+    public EventService(TeacherRepository teacherRepository, Converters converters, SchoolRepository schoolRepository, StudentRepository studentRepository, EventRepository eventRepository, ParticipationRepository participationRepository) {
         this.converters = converters;
+        this.teacherRepository = teacherRepository;
         this.schoolRepository = schoolRepository;
         this.studentRepository = studentRepository;
         this.eventRepository = eventRepository;
@@ -33,6 +35,11 @@ public class EventService {
         return converters.toGraphQLType(eventEntity);
     }
 
+    public List<Event> getTeacherEvents(String teacherId) {
+        List<EventEntity> events = eventRepository.findAllByTeacherId(UUID.fromString(teacherId));
+        return events.stream().map(converters::toGraphQLType).collect(Collectors.toList());
+    }
+
     public List<Event> getSchoolEvents(String schoolId) {
         List<EventEntity> events = eventRepository.findAllBySchoolId(UUID.fromString(schoolId));
         return events.stream().map(converters::toGraphQLType).collect(Collectors.toList());
@@ -40,7 +47,8 @@ public class EventService {
 
     public Event createEvent(CreateEventInput createEventInput) {
         SchoolEntity schoolEntity = schoolRepository.findById(UUID.fromString(createEventInput.getSchoolId())).orElseThrow();
-        EventEntity event = converters.toEntity(createEventInput, schoolEntity);
+        TeacherEntity teacherEntity = teacherRepository.findById(UUID.fromString(createEventInput.getTeacherId())).orElseThrow();
+        EventEntity event = converters.toEntity(createEventInput, schoolEntity, teacherEntity);
         eventRepository.save(event);
         return converters.toGraphQLType(event);
     }

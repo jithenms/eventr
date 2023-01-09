@@ -10,6 +10,10 @@ public class EventEntity extends BaseEntity {
     @JoinColumn(name = "school_id", nullable = false)
     private SchoolEntity school;
 
+    @OneToOne
+    @JoinColumn(name = "teacher_id", nullable = false)
+    private TeacherEntity teacher;
+
     @Column(name = "title", nullable = false)
     private String title;
 
@@ -33,6 +37,14 @@ public class EventEntity extends BaseEntity {
 
     public SchoolEntity getSchool() {
         return school;
+    }
+
+    public TeacherEntity getTeacher() {
+        return teacher;
+    }
+
+    public void setTeacher(TeacherEntity teacher) {
+        this.teacher = teacher;
     }
 
     public EventEntity setSchool(SchoolEntity schoolEntity) {

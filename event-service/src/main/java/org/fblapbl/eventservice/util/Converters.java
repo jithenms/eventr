@@ -81,6 +81,7 @@ public class Converters {
     public Event toGraphQLType(EventEntity eventEntity) {
         Event event = new Event();
         event.setId(eventEntity.getId().toString());
+        event.setTeacher(toGraphQLType(eventEntity.getTeacher()));
         event.setSchool(toGraphQLType(eventEntity.getSchool()));
         event.setTitle(eventEntity.getTitle());
         event.setDescription(eventEntity.getDescription());
@@ -116,12 +117,14 @@ public class Converters {
         student.setFirstName(input.getFirstName());
         student.setLastName(input.getLastName());
         student.setEmail(input.getEmail());
+        student.setGrade(input.getGrade());
         return student;
     }
 
-    public EventEntity toEntity(CreateEventInput input, SchoolEntity schoolEntity) {
+    public EventEntity toEntity(CreateEventInput input, SchoolEntity schoolEntity, TeacherEntity teacherEntity) {
         EventEntity event = new EventEntity();
         event.setSchool(schoolEntity);
+        event.setTeacher(teacherEntity);
         event.setTitle(input.getTitle());
         event.setDescription(input.getDescription());
         event.setDate(toDate(input.getDate()));

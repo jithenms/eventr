@@ -5,7 +5,8 @@ type Query {
     allTeachers: [Teacher]
     allSchools: [School]
     schoolEvents(schoolId: String): [Event]
-    event(schoolId: String, eventId: String): Event
+    teacherEvents(teacherId: String): [Event]
+    event(eventId: String): Event
     eventsByTeacher(teacherId: String): [Event]
     leaderboard(schoolId: String!, quarter: Int!): [Student]
 }
@@ -38,6 +39,7 @@ input CreateStudentInput {
     lastName: String
     email: String
     password: String
+    grade: Int
 }
 
 input CreateEventInput {
@@ -98,6 +100,7 @@ type Student {
 
 type Event {
     id: String
+    teacher: Teacher
     school: School
     title: String
     description: String

@@ -20,6 +20,10 @@ public class EventDataFetcher {
     }
 
     @DgsQuery
+    public List<Event> teacherEvents(@InputArgument String teacherId) {
+        return eventService.getTeacherEvents(teacherId);}
+
+    @DgsQuery
     public List<Event> schoolEvents(@InputArgument String schoolId) {
         return eventService.getSchoolEvents(schoolId);
     }
