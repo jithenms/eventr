@@ -3,70 +3,71 @@ package org.fblapbl.eventservice.services;
 import org.fblapbl.eventservice.entities.*;
 import org.fblapbl.eventservice.graphql.types.CreateEventInput;
 import org.fblapbl.eventservice.graphql.types.Event;
-import org.fblapbl.eventservice.repositories.EventRepository;
-import org.fblapbl.eventservice.repositories.StudentEventRepository;
-import org.fblapbl.eventservice.repositories.StudentRepository;
-import org.fblapbl.eventservice.repositories.TeacherRepository;
+import org.fblapbl.eventservice.repositories.*;
 import org.fblapbl.eventservice.util.Converters;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
+@Service
 public class EventService {
-    private final TeacherRepository teacherRepository;
+    private final Converters converters;
+    private final SchoolRepository schoolRepository;
     private final StudentRepository studentRepository;
     private final EventRepository eventRepository;
-    private final StudentEventRepository studentEventRepository;
+    private final ParticipationRepository participationRepository;
 
 
-    public EventService(TeacherRepository teacherRepository, StudentRepository studentRepository, EventRepository eventRepository, StudentEventRepository studentEventRepository) {
-        this.teacherRepository = teacherRepository;
+    public EventService(Converters converters, SchoolRepository schoolRepository, StudentRepository studentRepository, EventRepository eventRepository, ParticipationRepository participationRepository) {
+        this.converters = converters;
+        this.schoolRepository = schoolRepository;
         this.studentRepository = studentRepository;
         this.eventRepository = eventRepository;
-        this.studentEventRepository = studentEventRepository;
+        this.participationRepository = participationRepository;
     }
 
     public Event getEvent(String eventId) {
         EventEntity eventEntity = eventRepository.findById(UUID.fromString(eventId)).orElseThrow(() -> new IllegalArgumentException("No Event Found"));
-        return Converters.convertEvent(eventEntity);
+        return converters.toGraphQLType(eventEntity);
     }
 
     public List<Event> getSchoolEvents(String schoolId) {
         List<EventEntity> events = eventRepository.findAllBySchoolId(UUID.fromString(schoolId));
-        return events.stream().map(Converters::convertEvent).collect(Collectors.toList());
+        return events.stream().map(converters::toGraphQLType).collect(Collectors.toList());
     }
 
     public Event createEvent(CreateEventInput createEventInput) {
-        TeacherEntity teacherEntity = teacherRepository.getByAuthId((createEventInput.getTeacherId()));
-        EventEntity event = Converters.buildEventEntity(createEventInput, teacherEntity);
+        SchoolEntity schoolEntity = schoolRepository.findById(UUID.fromString(createEventInput.getSchoolId())).orElseThrow();
+        EventEntity event = converters.toEntity(createEventInput, schoolEntity);
         eventRepository.save(event);
-        return Converters.convertEvent(event);
+        return converters.toGraphQLType(event);
     }
 
     public Event joinEvent(String eventId, String studentId) {
         EventEntity eventEntity = eventRepository.findById(UUID.fromString(eventId)).orElseThrow();
-        StudentEntity studentEntity = studentRepository.getByAuthId(studentId);
-        StudentEventEntity studentEventEntity = Converters.buildEventUserEntity(eventEntity, studentEntity, StudentEventStatus.JOINED);
-        studentEventRepository.save(studentEventEntity);
-        return Converters.convertEvent(eventEntity);
+        StudentEntity studentEntity = studentRepository.findById(UUID.fromString(studentId)).orElseThrow();
+        ParticipationEntity participationEntity = converters.toEntity(eventEntity, studentEntity, ParticipationStatus.JOINED);
+        participationRepository.save(participationEntity);
+        return converters.toGraphQLType(eventEntity);
     }
 
     public Event leaveEvent(String eventId, String studentId) {
         EventEntity eventEntity = eventRepository.findById(UUID.fromString(eventId)).orElseThrow(() -> new IllegalArgumentException("Event not found"));
-        StudentEventEntity studentEventEntity = studentEventRepository.findByEventIdAndStudentId(UUID.fromString(eventId), UUID.fromString(studentId));
-        studentEventRepository.delete(studentEventEntity);
-        return Converters.convertEvent(eventEntity);
+        ParticipationEntity participationEntity = participationRepository.findByEventIdAndStudentId(UUID.fromString(eventId), UUID.fromString(studentId));
+        participationRepository.delete(participationEntity);
+        return converters.toGraphQLType(eventEntity);
     }
 
     public Event acceptEventRequest(String eventId, String studentId) {
         EventEntity eventEntity = eventRepository.findById(UUID.fromString(eventId)).orElseThrow(() -> new IllegalArgumentException("Event not found"));
         StudentEntity studentEntity = studentRepository.findById(UUID.fromString(studentId)).orElseThrow(() -> new IllegalArgumentException("Student not found"));
-        StudentEventEntity studentEventEntity = studentEventRepository.findByEventIdAndStudentId(UUID.fromString(eventId), UUID.fromString(studentId));
-        studentEventEntity.setStatus(StudentEventStatus.ACCEPTED);
-        studentEventRepository.save(studentEventEntity);
+        ParticipationEntity participationEntity = participationRepository.findByEventIdAndStudentId(UUID.fromString(eventId), UUID.fromString(studentId));
+        participationEntity.setStatus(ParticipationStatus.ACCEPTED);
+        participationRepository.save(participationEntity);
         calculateAndSetPoints(eventEntity, studentEntity);
-        return Converters.convertEvent(eventEntity);
+        return converters.toGraphQLType(eventEntity);
     }
 
     private void calculateAndSetPoints(EventEntity eventEntity, StudentEntity studentEntity) {

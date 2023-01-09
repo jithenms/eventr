@@ -12,10 +12,4 @@ import java.util.UUID;
 public interface EventRepository extends JpaRepository<EventEntity, UUID> {
     @Query(nativeQuery = true, value = "SELECT * FROM event e WHERE e.school_id = :schoolId")
     List<EventEntity> findAllBySchoolId(UUID schoolId);
-
-    @Query(nativeQuery = true, value = "SELECT * FROM event e WHERE e.teacher_id = :teacherId")
-    List<EventEntity> getAllByTeacherId(UUID teacherId);
-
-    @Query(nativeQuery = true, value = "SELECT * FROM event e WHERE e.school_id = :schoolId AND e.id = :eventId")
-    EventEntity findBySchoolIdAndEventId(UUID schoolId, UUID eventId);
 }

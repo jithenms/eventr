@@ -2,8 +2,6 @@ package org.fblapbl.eventservice.entities;
 
 import javax.persistence.*;
 import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
 
 @Entity
 @Table(name = "event")
@@ -11,10 +9,6 @@ public class EventEntity extends BaseEntity {
     @ManyToOne
     @JoinColumn(name = "school_id", nullable = false)
     private SchoolEntity school;
-
-    @ManyToOne
-    @JoinColumn(name = "teacher_id", nullable = false)
-    private TeacherEntity teacher;
 
     @Column(name = "title", nullable = false)
     private String title;
@@ -34,9 +28,6 @@ public class EventEntity extends BaseEntity {
     @Column(name = "quarter", nullable = false)
     private Integer quarter;
 
-    @OneToMany(mappedBy = "student", cascade = CascadeType.ALL)
-    private Set<StudentEventEntity> studentEventEntities = new HashSet<>();
-
     public EventEntity() {
     }
 
@@ -44,17 +35,8 @@ public class EventEntity extends BaseEntity {
         return school;
     }
 
-    public EventEntity setSchool(SchoolEntity school) {
-        this.school = school;
-        return this;
-    }
-
-    public TeacherEntity getTeacher() {
-        return teacher;
-    }
-
-    public EventEntity setTeacher(TeacherEntity teacher) {
-        this.teacher = teacher;
+    public EventEntity setSchool(SchoolEntity schoolEntity) {
+        this.school = schoolEntity;
         return this;
     }
 
@@ -109,15 +91,6 @@ public class EventEntity extends BaseEntity {
 
     public EventEntity setQuarter(Integer quarter) {
         this.quarter = quarter;
-        return this;
-    }
-
-    public Set<StudentEventEntity> getStudentEventEntities() {
-        return studentEventEntities;
-    }
-
-    public EventEntity setStudentEventEntities(Set<StudentEventEntity> studentEventEntities) {
-        this.studentEventEntities = studentEventEntities;
         return this;
     }
 }

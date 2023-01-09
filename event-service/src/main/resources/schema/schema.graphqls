@@ -1,8 +1,12 @@
 type Query {
-    student(authId: String): Student
-    teacher(authId: String): Teacher
-    schoolEvents(schoolId: String): Event
+    student(studentId: String): Student
+    teacher(teacherId: String): Teacher
+    allStudents: [Student]
+    allTeachers: [Teacher]
+    allSchools: [School]
+    schoolEvents(schoolId: String): [Event]
     event(schoolId: String, eventId: String): Event
+    eventsByTeacher(teacherId: String): [Event]
     leaderboard(schoolId: String!, quarter: Int!): [Student]
 }
 
@@ -31,7 +35,6 @@ input CreateStudentInput {
     password: String
 }
 
-
 input CreateEventInput {
     schoolId: String
     teacherId: String
@@ -43,14 +46,27 @@ input CreateEventInput {
     quarter: Int
 }
 
+type School {
+    id: String
+    name: String
+    code: Int
+    createdAt: String
+    updatedAt: String
+}
+
+type Participation {
+    id: String
+    studentId: String
+    eventId: String
+    status: ParticipationStatus
+}
+
 type Teacher {
     id: String
-    authId: String
     school: School
     firstName: String
     lastName: String
     email: String
-    events: [Event]
     createdAt: String
     updatedAt: String
 }
@@ -58,13 +74,11 @@ type Teacher {
 type Student {
     id: String
     school: School
-    authId: String
     firstName: String
     lastName: String
     email: String
     grade: Int
-    joinedEvents: [Event]
-    acceptedEvents: [Event]
+    participations: [Participation]
     points: Int
     q1points: Int
     q2points: Int
@@ -78,25 +92,13 @@ type Student {
 type Event {
     id: String
     school: School
-    teacher: Teacher
     title: String
     description: String
     points: Int
     time: String
     date: String
     quarter: Int
-    joinedStudents: [Student]
-    acceptedStudents: [Student]
-    createdAt: String
-    updatedAt: String
-}
-
-type School {
-    id: String
-    name: String
-    code: Int
-    createdAt: String
-    updatedAt: String
+    participations: [Participation]
 }
 
 enum UserRole {
@@ -104,7 +106,7 @@ enum UserRole {
     TEACHER
 }
 
-enum StudentEventStatus {
+enum ParticipationStatus {
     JOINED
     ACCEPTED
 }

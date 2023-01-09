@@ -1,181 +1,142 @@
 package org.fblapbl.eventservice.util;
 
 import org.fblapbl.eventservice.entities.*;
-import org.fblapbl.eventservice.entities.StudentEventStatus;
 import org.fblapbl.eventservice.graphql.types.*;
+import org.fblapbl.eventservice.graphql.types.ParticipationStatus;
+import org.fblapbl.eventservice.repositories.EventRepository;
+import org.fblapbl.eventservice.repositories.ParticipationRepository;
+import org.springframework.stereotype.Component;
 
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.TimeZone;
 import java.util.stream.Collectors;
 
+@Component
 public class Converters {
-    public static Student convertStudent(StudentEntity studentEntity, List<StudentEventEntity> eventUserEntities) {
-        List<EventEntity> joined =
-                eventUserEntities.stream()
-                        .filter(record -> record.getStatus().equals(StudentEventStatus.JOINED))
-                        .map(StudentEventEntity::getEvent)
-                        .collect(Collectors.toList());
+    private final ParticipationRepository participationRepository;
+    private final EventRepository eventRepository;
 
-        List<EventEntity> accepted =
-                eventUserEntities.stream()
-                        .filter(record -> record.getStatus().equals(StudentEventStatus.ACCEPTED))
-                        .map(StudentEventEntity::getEvent)
-                        .collect(Collectors.toList());
-
-        Student.Builder studentBuilder = Student.newBuilder()
-                .id(studentEntity.getId().toString())
-                .authId(studentEntity.getAuthId())
-                .firstName(studentEntity.getFirstName())
-                .lastName(studentEntity.getLastName())
-                .email(studentEntity.getEmail())
-                .points(studentEntity.getPoints())
-                .q1points(studentEntity.getQ1points())
-                .q2points(studentEntity.getQ2points())
-                .q3points(studentEntity.getQ3points())
-                .q4points(studentEntity.getQ4points())
-                .grade(studentEntity.getGrade())
-                .joinedEvents(joined.stream().map(Converters::convertEvent).collect(Collectors.toList()))
-                .acceptedEvents(accepted.stream().map(Converters::convertEvent).collect(Collectors.toList()))
-                .createdAt(studentEntity.getCreatedAt().toString())
-                .updatedAt(studentEntity.getUpdatedAt().toString());
-        return studentBuilder.build();
+    public Converters(ParticipationRepository participationRepository, EventRepository eventRepository) {
+        this.participationRepository = participationRepository;
+        this.eventRepository = eventRepository;
     }
 
-    public static Student convertStudent(StudentEntity studentEntity) {
-        Student.Builder studentBuilder = Student.newBuilder()
-                .id(studentEntity.getId().toString())
-                .authId(studentEntity.getAuthId())
-                .firstName(studentEntity.getFirstName())
-                .lastName(studentEntity.getLastName())
-                .email(studentEntity.getEmail())
-                .points(studentEntity.getPoints())
-                .q1points(studentEntity.getQ1points())
-                .q2points(studentEntity.getQ2points())
-                .q3points(studentEntity.getQ3points())
-                .q4points(studentEntity.getQ4points())
-                .grade(studentEntity.getGrade())
-                .createdAt(studentEntity.getCreatedAt().toString())
-                .updatedAt(studentEntity.getUpdatedAt().toString());
-        return studentBuilder.build();
-    }
-
-    public static Teacher convertTeacher(TeacherEntity teacherEntity) {
-        Teacher.Builder userBuilder = Teacher.newBuilder()
-                .id(teacherEntity.getId().toString())
-                .authId(teacherEntity.getAuthId())
-                .firstName(teacherEntity.getFirstName())
-                .lastName(teacherEntity.getLastName())
-                .email(teacherEntity.getEmail())
-                .createdAt(teacherEntity.getCreatedAt().toString())
-                .updatedAt(teacherEntity.getUpdatedAt().toString());
-        return userBuilder.build();
-    }
-
-    public static Event convertEvent(EventEntity eventEntity) {
-        List<StudentEntity> joined =
-                eventEntity.getStudentEventEntities().stream()
-                        .filter(record -> record.getStatus().equals(StudentEventStatus.JOINED))
-                        .map(StudentEventEntity::getStudent)
-                        .collect(Collectors.toList());
-
-        List<StudentEntity> accepted =
-                eventEntity.getStudentEventEntities().stream()
-                        .filter(record -> record.getStatus().equals(StudentEventStatus.ACCEPTED))
-                        .map(StudentEventEntity::getStudent)
-                        .collect(Collectors.toList());
-
-        Event.Builder eventBuilder = Event.newBuilder()
-                .id(eventEntity.getId().toString())
-                .teacher(Converters.convertTeacher(eventEntity.getTeacher()))
-                .title(eventEntity.getTitle())
-                .description(eventEntity.getDescription())
-                .date(eventEntity.getDate().toString())
-                .time(eventEntity.getTime())
-                .points(eventEntity.getPoints())
-                .date(eventEntity.getDate().toString())
-                .quarter(eventEntity.getQuarter())
-                .joinedStudents(joined.stream().map(Converters::convertStudent).collect(Collectors.toList()))
-                .acceptedStudents(accepted.stream().map(Converters::convertStudent).collect(Collectors.toList()))
-                .createdAt(eventEntity.getCreatedAt().toString())
-                .updatedAt(eventEntity.getUpdatedAt().toString());
-        return eventBuilder.build();
-    }
-
-    public static School convertSchool(SchoolEntity schoolEntity) {
-        School.Builder schoolBuilder = School.newBuilder()
-                .id(schoolEntity.getId().toString())
-                .name(schoolEntity.getName())
-                .code(schoolEntity.getCode())
-                .createdAt(schoolEntity.getCreatedAt().toString())
-                .updatedAt(schoolEntity.getUpdatedAt().toString());
-        return schoolBuilder.build();
-
-    }
-
-    public static SchoolEntity buildSchoolEntity(CreateAccountInput createAccountInput) {
-        SchoolEntity school = new SchoolEntity();
-        school.setName(createAccountInput.getSchoolName());
-        return school;
-    }
-
-    public static StudentEntity buildStudentEntity(CreateStudentInput createStudentInput, SchoolEntity schoolEntity, String authId) {
-        StudentEntity student = new StudentEntity();
-        student.setSchool(schoolEntity);
-        student.setAuthId(authId);
-        student.setFirstName(createStudentInput.getFirstName());
-        student.setLastName(createStudentInput.getLastName());
-        student.setEmail(createStudentInput.getEmail());
-        student.setPoints(0);
-        student.setQ1points(0);
-        student.setQ2points(0);
-        student.setQ3points(0);
-        student.setQ4points(0);
-        return student;
-    }
-
-    public static TeacherEntity buildTeacherEntity(CreateAccountInput createAccountInput, SchoolEntity schoolEntity, String authId) {
-        TeacherEntity teacher = new TeacherEntity();
-        teacher.setSchool(schoolEntity);
-        teacher.setAuthId(authId);
-        teacher.setFirstName(createAccountInput.getFirstName());
-        teacher.setLastName(createAccountInput.getLastName());
-        teacher.setEmail(createAccountInput.getEmail());
+    public Teacher toGraphQLType(TeacherEntity teacherEntity) {
+        Teacher teacher = new Teacher();
+        teacher.setId(teacherEntity.getId().toString());
+        teacher.setSchool(toGraphQLType(teacherEntity.getSchool()));
+        teacher.setFirstName(teacherEntity.getFirstName());
+        teacher.setLastName(teacherEntity.getLastName());
+        teacher.setEmail(teacherEntity.getEmail());
+        teacher.setCreatedAt(teacherEntity.getCreatedAt().toString());
+//      teacher.setUpdatedAt(teacherEntity.getUpdatedAt().toString());
         return teacher;
     }
 
-    public static EventEntity buildEventEntity(CreateEventInput createEventInput, TeacherEntity teacherEntity) {
-        EventEntity event = new EventEntity();
-        event.setTeacher(teacherEntity);
-        event.setTitle(createEventInput.getTitle());
-        event.setDescription(createEventInput.getDescription());
-        event.setPoints(createEventInput.getPoints());
-        event.setDate(toDate(createEventInput.getDate()));
-        event.setTime(createEventInput.getTime());
-        event.setQuarter(createEventInput.getQuarter());
+    public Student toGraphQLType(StudentEntity studentEntity) {
+        Student student = new Student();
+        student.setId(studentEntity.getId().toString());
+        student.setSchool(toGraphQLType(studentEntity.getSchool()));
+        student.setFirstName(studentEntity.getFirstName());
+        student.setLastName(studentEntity.getLastName());
+        student.setEmail(studentEntity.getEmail());
+        student.setGrade(studentEntity.getGrade());
+        List<ParticipationEntity> participationEntities = participationRepository.findAllByEventId(studentEntity.getId());
+        student.setParticipations(participationEntities.stream().map(this::toGraphQLType).collect(Collectors.toList()));
+        student.setPoints(studentEntity.getPoints());
+        student.setQ1points(studentEntity.getQ1points());
+        student.setQ2points(studentEntity.getQ2points());
+        student.setQ3points(studentEntity.getQ3points());
+        student.setQ4points(studentEntity.getQ4points());
+        student.setCreatedAt(studentEntity.getCreatedAt().toString());
+//      student.setUpdatedAt(studentEntity.getUpdatedAt().toString());
+        return student;
+    }
+
+    public School toGraphQLType(SchoolEntity schoolEntity) {
+        School school = new School();
+        school.setId(schoolEntity.getId().toString());
+        school.setName(schoolEntity.getName());
+        school.setCode(schoolEntity.getCode());
+        school.setCreatedAt(schoolEntity.getCreatedAt().toString());
+//      school.setUpdatedAt(schoolEntity.getUpdatedAt().toString());
+        return school;
+    }
+
+    public Participation toGraphQLType(ParticipationEntity participationEntity) {
+        Participation participation = new Participation();
+        participation.setId(participationEntity.getId().toString());
+        participation.setStudentId(participationEntity.getStudentId().toString());
+        participation.setEventId(participationEntity.getEventId().toString());
+        participation.setStatus(ParticipationStatus.valueOf(participationEntity.getStatus().name()));
+        return participation;
+    }
+
+    public Event toGraphQLType(EventEntity eventEntity) {
+        Event event = new Event();
+        event.setId(eventEntity.getId().toString());
+        event.setSchool(toGraphQLType(eventEntity.getSchool()));
+        event.setTitle(eventEntity.getTitle());
+        event.setDescription(eventEntity.getDescription());
+        event.setPoints(eventEntity.getPoints());
+        event.setTime(eventEntity.getTime());
+        event.setDate(eventEntity.getDate().toString());
+        event.setQuarter(eventEntity.getQuarter());
+        List<ParticipationEntity> participationEntities = participationRepository.findAllByEventId(eventEntity.getId());
+        event.setParticipations(participationEntities.stream().map(this::toGraphQLType).collect(Collectors.toList()));
         return event;
     }
 
-    public static StudentEventEntity buildEventUserEntity(EventEntity eventEntity, StudentEntity studentEntity, StudentEventStatus status) {
-        StudentEventEntity studentEventEntity = new StudentEventEntity();
-        studentEventEntity.setEvent(eventEntity);
-        studentEventEntity.setStudent(studentEntity);
-        studentEventEntity.setStatus(status);
-        return studentEventEntity;
+    public SchoolEntity toEntity(CreateAccountInput input) {
+        SchoolEntity school = new SchoolEntity();
+        school.setName(input.getSchoolName());
+        return school;
     }
 
-    public static String getToken(String bearerToken) {
-        try {
-            return bearerToken.split("Bearer ")[1];
-        } catch (Exception e) {
-            throw new IllegalArgumentException("Invalid Bearer Token Format");
-        }
+    public TeacherEntity toEntity(CreateAccountInput input, SchoolEntity schoolEntity) {
+        TeacherEntity teacher = new TeacherEntity();
+        teacher.setSchool(schoolEntity);
+        teacher.setFirstName(input.getFirstName());
+        teacher.setLastName(input.getLastName());
+        teacher.setEmail(input.getEmail());
+        return teacher;
     }
 
-    public static Date toDate(String dateInput) {
+    public StudentEntity toEntity(CreateStudentInput input, SchoolEntity schoolEntity) {
+        StudentEntity student = new StudentEntity();
+        student.setSchool(schoolEntity);
+        student.setFirstName(input.getFirstName());
+        student.setLastName(input.getLastName());
+        student.setEmail(input.getEmail());
+        return student;
+    }
+
+    public EventEntity toEntity(CreateEventInput input, SchoolEntity schoolEntity) {
+        EventEntity event = new EventEntity();
+        event.setSchool(schoolEntity);
+        event.setTitle(input.getTitle());
+        event.setDescription(input.getDescription());
+        event.setDate(toDate(input.getDate()));
+        event.setTime(input.getTime());
+        event.setPoints(input.getPoints());
+        event.setQuarter(input.getQuarter());
+        return event;
+    }
+
+    public ParticipationEntity toEntity(EventEntity eventEntity, StudentEntity studentEntity, org.fblapbl.eventservice.entities.ParticipationStatus status) {
+        ParticipationEntity participation = new ParticipationEntity();
+        participation.setEventId(eventEntity.getId());
+        participation.setStudentId(studentEntity.getId());
+        participation.setStatus(status);
+        return participation;
+    }
+
+    public Date toDate(String dateInput) {
         try {
             TimeZone tz = TimeZone.getTimeZone("UTC");
             DateFormat df = new SimpleDateFormat("yyyy-MM-dd");

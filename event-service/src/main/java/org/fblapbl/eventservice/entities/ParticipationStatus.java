@@ -1,6 +1,6 @@
 package org.fblapbl.eventservice.entities;
 
-public enum StudentEventStatus {
+public enum ParticipationStatus {
     JOINED,
     ACCEPTED
 }

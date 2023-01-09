@@ -19,13 +19,28 @@ public class UserDataFetcher {
     }
 
     @DgsQuery
-    public Student student(@InputArgument String authId) {
-        return userService.getStudent(authId);
+    public List<Student> allStudents() {
+        return userService.getAllStudents();
     }
 
     @DgsQuery
-    public Teacher teacher(@InputArgument String authId) {
-        return userService.getTeacher(authId);
+    public List<School> allSchools() {
+        return userService.getAllSchools();
+    }
+
+    @DgsQuery
+    public List<Teacher> allTeachers() {
+        return userService.getAllTeachers();
+    }
+
+    @DgsQuery
+    public Student student(@InputArgument String studentId) {
+        return userService.getStudent(studentId);
+    }
+
+    @DgsQuery
+    public Teacher teacher(@InputArgument String teacherId) {
+        return userService.getTeacher(teacherId);
     }
 
     @DgsQuery

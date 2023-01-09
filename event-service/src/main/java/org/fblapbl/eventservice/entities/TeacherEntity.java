@@ -1,6 +1,9 @@
 package org.fblapbl.eventservice.entities;
 
+import org.fblapbl.eventservice.graphql.types.Event;
+
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Table(name = "teacher")
@@ -8,9 +11,6 @@ public class TeacherEntity extends BaseEntity {
     @ManyToOne
     @JoinColumn(name = "school_id")
     private SchoolEntity school;
-
-    @Column(name = "auth_id", nullable = false, unique = true)
-    private String authId;
 
     @Column(name = "first_name")
     private String firstName;
@@ -33,15 +33,6 @@ public class TeacherEntity extends BaseEntity {
 
     public TeacherEntity setSchool(SchoolEntity school) {
         this.school = school;
-        return this;
-    }
-
-    public String getAuthId() {
-        return authId;
-    }
-
-    public TeacherEntity setAuthId(String authId) {
-        this.authId = authId;
         return this;
     }
 
