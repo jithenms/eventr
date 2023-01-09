@@ -34,6 +34,18 @@ public class UserService {
         this.authService = authService;
     }
 
+    public List<Student> getAllStudents() {
+        return studentRepository.findAll().stream().map(converters::toGraphQLType).collect(Collectors.toList());
+    }
+
+    public List<School> getAllSchools() {
+        return schoolRepository.findAll().stream().map(converters::toGraphQLType).collect(Collectors.toList());
+    }
+
+    public List<Teacher> getAllTeachers() {
+        return teacherRepository.findAll().stream().map(converters::toGraphQLType).collect(Collectors.toList());
+    }
+
     public Student getStudent(String studentId) {
         StudentEntity studentEntity = studentRepository.findById(UUID.fromString(studentId)).orElseThrow();
         return converters.toGraphQLType(studentEntity);
