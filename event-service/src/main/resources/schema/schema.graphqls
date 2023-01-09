@@ -64,6 +64,8 @@ type Participation {
     studentId: String
     eventId: String
     status: ParticipationStatus
+    createdAt: String
+    updatedAt: String
 }
 
 type Teacher {
@@ -104,6 +106,8 @@ type Event {
     date: String
     quarter: Int
     participations: [Participation]
+    createdAt: String
+    updatedAt: String
 }
 
 enum UserRole {

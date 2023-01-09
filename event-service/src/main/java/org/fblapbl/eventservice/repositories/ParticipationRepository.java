@@ -15,4 +15,7 @@ public interface ParticipationRepository extends JpaRepository<ParticipationEnti
 
     @Query(nativeQuery = true, value = "SELECT * FROM participation p WHERE p.event_id = :eventId")
     List<ParticipationEntity> findAllByEventId(UUID eventId);
+
+    @Query(nativeQuery = true, value = "SELECT * FROM participation p WHERE p.student_id = :studentId")
+    List<ParticipationEntity> findAllByStudentId(UUID studentId);
 }
