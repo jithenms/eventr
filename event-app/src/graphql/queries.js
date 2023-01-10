@@ -27,11 +27,14 @@ export const GET_EVENTS = gql`
 export const GET_EVENT = gql`
     query event($EventId: String) {
         event(eventId: $EventId) {
+            id
             title
+            quarter
             participations {
                 id
                 studentId
                 status
+                eventId
             }
             date
             teacher {
@@ -39,7 +42,6 @@ export const GET_EVENT = gql`
                 lastName
             }
             points
-            
         }
     }
 `;
@@ -152,6 +154,7 @@ export const GET_LEADERBOARD = gql`
                 id
                 status
                 studentId
+                eventId
             }
         }
     }

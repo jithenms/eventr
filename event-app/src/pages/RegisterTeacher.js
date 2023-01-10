@@ -1,12 +1,15 @@
 import { useMutation } from '@apollo/client';
+import { MenuItem, Select } from '@mui/material';
 import { Formik } from 'formik';
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../auth/AuthContext';
-import { CREATE_TEACHER } from '../graphql/mutations';
+import { CREATE_TEACHER, CREATE_SCHOOL } from '../graphql/mutations';
 import LoadingScreen from './LoadingScreen';
 
 function RegisterTeacher() {
+    const [old, setOld] = useState(false);
+
     const navigate = useNavigate();
 
     const { login } = useAuth();
@@ -18,6 +21,7 @@ function RegisterTeacher() {
         password: '',
         confirmPassword: '',
         schoolCode: '',
+        schoolName: '',
     };
 
     const validate = (values) => {
@@ -26,7 +30,7 @@ function RegisterTeacher() {
         if (!values.lastName) errors.lastName = 'Last name is required.';
         if (!values.email) errors.email = 'Email is required.';
         if (!values.password) errors.password = 'Password is required.';
-        if (!values.schoolCode) errors.schoolCode = 'School code is required.';
+        // if (!values.schoolCode) errors.schoolCode = 'School code is required.';
         if (values.confirmPassword !== values.password)
             errors.confirmPassword = 'Passwords must match.';
         return errors;
@@ -35,9 +39,14 @@ function RegisterTeacher() {
     const [createTeacher, { data, loading, error }] =
         useMutation(CREATE_TEACHER);
 
+    const [createSchool, { sData, sLoading, sError }] =
+        useMutation(CREATE_SCHOOL);
+
     if (data) navigate('/login');
     if (loading) return <LoadingScreen />;
     if (error) console.log(error);
+
+    console.log(old);
 
     return (
         <div class="bg-[#F3F7F9] min-h-screen flex flex-col">
@@ -46,7 +55,7 @@ function RegisterTeacher() {
                     <h1 className="text-indigo-600 text-6xl font-poppins font-extrabold text-center">
                         eventr.
                     </h1>
-                    <h1 class="mb-8 mt-8 text-3xl text-center font-bold">
+                    <h1 class="mt-8 text-3xl text-center font-bold">
                         Register as teacher
                     </h1>
                     <Formik
@@ -54,28 +63,63 @@ function RegisterTeacher() {
                         validate={validate}
                         onSubmit={(values) => {
                             // same shape as initial values
-                            createTeacher({
-                                variables: {
-                                    createTeacherInput: {
-                                        firstName: values.firstName,
-                                        lastName: values.lastName,
-                                        email: values.email,
-                                        password: values.password,
-                                        schoolCode: values.schoolCode,
-                                    },
-                                },
-                            }).then(async (data) => {
-                                try {
-                                    await login(
-                                        values?.email,
-                                        values?.password,
-                                    );
-                                    navigate('/');
-                                    // console.log(data);
-                                } catch {
-                                    console.log(error);
-                                }
-                            });
+                            old
+                                ? createTeacher({
+                                      variables: {
+                                          CreateTeacherInput: {
+                                              firstName: values.firstName,
+                                              lastName: values.lastName,
+                                              email: values.email,
+                                              password: values.password,
+                                              schoolCode: values.schoolCode,
+                                          },
+                                      },
+                                  }).then(async (data) => {
+                                      try {
+                                          await login(
+                                              values?.email,
+                                              values?.password,
+                                          );
+                                          navigate('/');
+                                          // console.log(data);
+                                      } catch {
+                                          console.log(error);
+                                      }
+                                  })
+                                : createSchool({
+                                      variables: {
+                                          CreateSchoolInput: {
+                                              schoolName: values.schoolName,
+                                          },
+                                      },
+                                  }).then(async (data) => {
+                                      console.log(data);
+                                      createTeacher({
+                                          variables: {
+                                              CreateTeacherInput: {
+                                                  firstName: values.firstName,
+                                                  lastName: values.lastName,
+                                                  email: values.email,
+                                                  password: values.password,
+                                                  schoolCode:
+                                                      data?.data?.createSchool
+                                                          ?.code,
+                                              },
+                                          },
+                                      }).then(async (data) => {
+                                          console.log(data);
+                                          try {
+                                              await login(
+                                                  values?.email,
+                                                  values?.password,
+                                              );
+                                              navigate('/');
+                                              // console.log(data);
+                                          } catch {
+                                              console.log(error);
+                                          }
+                                      });
+                                  });
                         }}
                     >
                         {(formik) => {
@@ -89,21 +133,39 @@ function RegisterTeacher() {
                             } = formik;
                             return (
                                 <form onSubmit={handleSubmit}>
-                                    <input
-                                        type="text"
-                                        id="schoolCode"
-                                        class="block border border-grey-light w-full p-3 rounded outline-none"
-                                        placeholder="School Code"
-                                        value={values.schoolCode}
-                                        onChange={handleChange}
-                                        onBlur={handleBlur}
-                                    />
-                                    {errors.schoolCode &&
-                                        touched.schoolCode && (
-                                            <span className="text-red-500 text-xs italic">
-                                                {errors.schoolCode}
-                                            </span>
-                                        )}
+                                    <Select
+                                        value={old}
+                                        className="w-full mt-4"
+                                        onChange={(e) => setOld(e.target.value)}
+                                    >
+                                        <MenuItem value={false}>
+                                            Create New School
+                                        </MenuItem>
+                                        <MenuItem value={true}>
+                                            Join Existing School
+                                        </MenuItem>
+                                    </Select>
+                                    {old ? (
+                                        <input
+                                            type="text"
+                                            id="schoolCode"
+                                            class="block border border-grey-ligh mt-4 w-full p-3 rounded outline-none"
+                                            placeholder="School Code (For Existing School)"
+                                            value={values.schoolCode}
+                                            onChange={handleChange}
+                                            onBlur={handleBlur}
+                                        />
+                                    ) : (
+                                        <input
+                                            type="text"
+                                            id="schoolName"
+                                            class="block border border-grey-light mt-4 w-full p-3 rounded outline-none"
+                                            placeholder="School Name (For New School)"
+                                            value={values.schoolName}
+                                            onChange={handleChange}
+                                            onBlur={handleBlur}
+                                        />
+                                    )}
                                     <input
                                         type="text"
                                         id="firstName"

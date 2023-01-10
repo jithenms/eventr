@@ -17,6 +17,15 @@ export const CREATE_STUDENT = gql`
     }
 `;
 
+export const CREATE_SCHOOL = gql`
+    mutation createSchool($CreateSchoolInput: CreateSchoolInput!) {
+        createSchool(createSchoolInput: $CreateSchoolInput) {
+            id
+            code
+        }
+    }
+`;
+
 export const CREATE_TEACHER = gql`
     mutation createTeacher($CreateTeacherInput: CreateTeacherInput!) {
         createTeacher(createTeacherInput: $CreateTeacherInput) {

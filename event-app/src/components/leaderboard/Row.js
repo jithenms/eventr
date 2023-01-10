@@ -11,14 +11,12 @@ import {
 } from '@mui/material';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
-
-import React from 'react';
+import React, { useState } from 'react';
+import PastRow from './PastRow';
 
 function Row(props) {
     const { user, timeframe, ranking, handleClick } = props;
-    const [open, setOpen] = React.useState(false);
-
-    console.log(user);
+    const [open, setOpen] = useState(false);
 
     return (
         <React.Fragment>
@@ -68,8 +66,11 @@ function Row(props) {
             </TableRow>
             <TableRow>
                 <TableCell
-                    style={{ paddingBottom: 0, paddingTop: 0 }}
-                    colSpan={6}
+                    style={{
+                        paddingBottom: 0,
+                        paddingTop: 0,
+                    }}
+                    colSpan={7}
                 >
                     <Collapse in={open} timeout="auto" unmountOnExit>
                         <Box sx={{ margin: 1 }}>
@@ -84,29 +85,36 @@ function Row(props) {
                                 <TableHead>
                                     <TableRow>
                                         <TableCell>
-                                            <b>Date</b>
-                                        </TableCell>
-                                        <TableCell>
                                             <b>Event</b>
                                         </TableCell>
                                         <TableCell>
                                             <b>Points</b>
                                         </TableCell>
+                                        <TableCell>
+                                            <b>Quarter</b>
+                                        </TableCell>
+                                        <TableCell align="right">
+                                            <b>Date</b>
+                                        </TableCell>
                                     </TableRow>
                                 </TableHead>
-                                <TableBody>
-                                    {/* {user?.joinedEvents.map((event) => ( */}
-                                    <TableRow
-                                    // key={event?.date?.substring(0, 10)}
-                                    >
-                                        <TableCell component="th" scope="row">
-                                            {/* {event?.date?.substring(0, 10)} */}
-                                            2023-01-15
-                                        </TableCell>
-                                        <TableCell>title</TableCell>
-                                        <TableCell>points</TableCell>
-                                    </TableRow>
-                                    // {/* ))} */}
+                                <TableBody className="w-full">
+                                    {user?.participations?.map(
+                                        (participation) => {
+                                            if (
+                                                participation?.status ==
+                                                'JOINED'
+                                            ) {
+                                                return (
+                                                    <PastRow
+                                                        participation={
+                                                            participation
+                                                        }
+                                                    />
+                                                );
+                                            }
+                                        },
+                                    )}
                                 </TableBody>
                             </Table>
                         </Box>
