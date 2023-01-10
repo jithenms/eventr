@@ -12,7 +12,7 @@ At the end of each quarter, Eventr generates a report showing the points accumul
 
 ### For Windows:
 
-1. On the GitHub repository page, click on the "Code" button. In the pop-up window, click on the "Download ZIP" button. A download prompt will appear. Select a location on your computer where you want to save the downloaded files and click "Save". Once the download is complete, locate the downloaded ZIP file on your computer and extract it to a location of your choice (e.g. your desktop).
+1. Select the zip file in the Google drive folder, right-click and choose "Download", then unzip the file when the download is complete to access the project files.
 
 2. Open a web browser and go to the Docker website (https://www.docker.com/). On the Docker homepage, click on the "Get Docker" button. On the next page, click on the "Download" button for "Docker Desktop for Windows". Follow the prompts to install Docker on your computer.
 
@@ -22,7 +22,7 @@ At the end of each quarter, Eventr generates a report showing the points accumul
 
 ### For Mac:
 
-1. On the GitHub repository page, click on the "Code" button. In the pop-up window, click on the "Download ZIP" button. A download prompt will appear. Select a location on your computer where you want to save the downloaded files and click "Save". Once the download is complete, locate the downloaded ZIP file on your computer and extract it to a location of your choice (e.g. your desktop).
+1. Select the zip file in the Google drive folder, right-click and choose "Download", then unzip the file when the download is complete to access the project files.
 
 2. Open a web browser and go to the Docker website (https://www.docker.com/). On the Docker homepage, click on the "Get Docker" button. On the next page, click on the "Download" button for "Docker Desktop for Mac". Follow the prompts to install Docker on your computer.
 
