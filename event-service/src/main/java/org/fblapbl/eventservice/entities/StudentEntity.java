@@ -1,6 +1,7 @@
 package org.fblapbl.eventservice.entities;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -36,6 +37,9 @@ public class StudentEntity extends BaseEntity {
 
     @Column(name = "q4_points")
     private int q4points;
+
+    public StudentEntity() {
+    }
 
     public SchoolEntity getSchool() {
         return school;

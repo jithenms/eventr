@@ -1,14 +1,13 @@
 package org.fblapbl.eventservice.entities;
 
 import javax.persistence.*;
+import java.util.Random;
 
 @Entity
 @Table(name = "school")
 public class SchoolEntity extends BaseEntity {
-    @Column(unique = true)
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "join_code_generator")
-    @SequenceGenerator(name = "join_code_generator", sequenceName = "join_code_seq", allocationSize = 1)
-    private String code;
+    @Column(name = "code", unique = true, updatable = false)
+    private Integer code;
 
     @Column(name = "name", nullable = false)
     private String name;
@@ -32,13 +31,14 @@ public class SchoolEntity extends BaseEntity {
     private String zipCode;
 
     public SchoolEntity() {
+        this.code = 100000 + new Random().nextInt(900000);
     }
 
-    public String getCode() {
+    public Integer getCode() {
         return code;
     }
 
-    public SchoolEntity setCode(String code) {
+    public SchoolEntity setCode(Integer code) {
         this.code = code;
         return this;
     }

@@ -6,11 +6,13 @@ import java.util.UUID;
 @Entity
 @Table(name = "participation")
 public class ParticipationEntity extends BaseEntity {
-    @Column(name = "student_id", nullable = false)
-    private UUID studentId;
+    @ManyToOne
+    @JoinColumn(name = "student_id", nullable = false)
+    private StudentEntity student;
 
-    @Column(name = "event_id", nullable = false)
-    private UUID eventId;
+    @ManyToOne
+    @JoinColumn(name = "event_id", nullable = false)
+    private EventEntity event;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "status")
@@ -19,28 +21,31 @@ public class ParticipationEntity extends BaseEntity {
     public ParticipationEntity() {
     }
 
-    public UUID getStudentId() {
-        return studentId;
+    public StudentEntity getStudent() {
+        return student;
     }
 
-    public void setStudentId(UUID studentId) {
-        this.studentId = studentId;
+    public ParticipationEntity setStudent(StudentEntity student) {
+        this.student = student;
+        return this;
     }
 
-    public UUID getEventId() {
-        return eventId;
+    public EventEntity getEvent() {
+        return event;
     }
 
-    public void setEventId(UUID eventId) {
-        this.eventId = eventId;
+    public ParticipationEntity setEvent(EventEntity event) {
+        this.event = event;
+        return this;
     }
 
     public ParticipationStatus getStatus() {
         return status;
     }
 
-    public void setStatus(ParticipationStatus status) {
+    public ParticipationEntity setStatus(ParticipationStatus status) {
         this.status = status;
+        return this;
     }
 }
 

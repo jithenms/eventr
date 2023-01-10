@@ -4,10 +4,13 @@ type Query {
     allStudents: [Student]
     allTeachers: [Teacher]
     allSchools: [School]
-    schoolEvents(schoolId: String): [Event]
-    teacherEvents(teacherId: String): [Event]
-    event(eventId: String): Event
-    eventsByTeacher(teacherId: String): [Event]
+    schoolEvents(schoolId: String!): [Event]
+    studentParticipation(studentId: String!): [Participation]
+    eventParticipation(eventId: String!): [Participation]
+    teacherEvents(teacherId: String!): [Event]
+    event(eventId: String!): Event
+    schoolPrizes(schoolId: String!): [Prize]
+    studentPrizes(studentId: String!): [Prize]
     leaderboard(schoolId: String!, quarter: Int!): [Student]
 }
 
@@ -19,6 +22,8 @@ type Mutation {
     joinEvent(eventId: String, studentId: String): Event
     acceptEventRequest(eventId: String!, studentId: String!): Event
     leaveEvent(eventId: String!, studentId: String!): Event
+    createPrize(createPrizeInput: CreatePrizeInput!): Prize
+    redeemPrize(prizeId: String!, studentId: String!): Prize
 }
 
 input CreateSchoolInput {
@@ -26,7 +31,7 @@ input CreateSchoolInput {
 }
 
 input CreateTeacherInput {
-    schoolCode: String
+    schoolCode: Int
     firstName: String
     lastName: String
     email: String
@@ -34,7 +39,7 @@ input CreateTeacherInput {
 }
 
 input CreateStudentInput {
-    schoolCode: String
+    schoolCode: Int
     firstName: String
     lastName: String
     email: String
@@ -53,18 +58,24 @@ input CreateEventInput {
     quarter: Int
 }
 
+input CreatePrizeInput {
+    schoolId: String
+    name: String
+    pointsRequired: Int
+}
+
 type School {
     id: String
     name: String
-    code: String
+    code: Int
     createdAt: String
     updatedAt: String
 }
 
 type Participation {
     id: String
-    studentId: String
-    eventId: String
+    student: Student
+    event: Event
     status: ParticipationStatus
     createdAt: String
     updatedAt: String
@@ -87,7 +98,6 @@ type Student {
     lastName: String
     email: String
     grade: Int
-    participations: [Participation]
     points: Int
     q1points: Int
     q2points: Int
@@ -108,9 +118,15 @@ type Event {
     time: String
     date: String
     quarter: Int
-    participations: [Participation]
     createdAt: String
     updatedAt: String
+}
+
+type Prize {
+    id: String
+    school: School
+    name: String
+    pointsRequired: Int
 }
 
 enum UserRole {

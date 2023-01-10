@@ -6,6 +6,7 @@ import com.netflix.graphql.dgs.DgsQuery;
 import com.netflix.graphql.dgs.InputArgument;
 import org.fblapbl.eventservice.graphql.types.CreateEventInput;
 import org.fblapbl.eventservice.graphql.types.Event;
+import org.fblapbl.eventservice.graphql.types.Participation;
 import org.fblapbl.eventservice.services.EventService;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -27,6 +28,17 @@ public class EventDataFetcher {
     public List<Event> schoolEvents(@InputArgument String schoolId) {
         return eventService.getSchoolEvents(schoolId);
     }
+
+    @DgsQuery
+    public List<Participation> studentParticipation(@InputArgument String studentId) {
+        return eventService.getStudentParticipation(studentId);
+    }
+
+    @DgsQuery
+    public List<Participation> eventParticipation(@InputArgument String eventId) {
+        return eventService.getEventParticipation(eventId);
+    }
+
 
     @DgsQuery
     public Event event(@InputArgument String eventId) {

@@ -3,6 +3,7 @@ package org.fblapbl.eventservice.services;
 import org.fblapbl.eventservice.entities.*;
 import org.fblapbl.eventservice.graphql.types.CreateEventInput;
 import org.fblapbl.eventservice.graphql.types.Event;
+import org.fblapbl.eventservice.graphql.types.Participation;
 import org.fblapbl.eventservice.repositories.*;
 import org.fblapbl.eventservice.util.Converters;
 import org.springframework.stereotype.Service;
@@ -21,13 +22,13 @@ public class EventService {
     private final TeacherRepository teacherRepository;
 
 
-    public EventService(TeacherRepository teacherRepository, Converters converters, SchoolRepository schoolRepository, StudentRepository studentRepository, EventRepository eventRepository, ParticipationRepository participationRepository) {
+    public EventService(Converters converters, SchoolRepository schoolRepository, StudentRepository studentRepository, EventRepository eventRepository, ParticipationRepository participationRepository, TeacherRepository teacherRepository) {
         this.converters = converters;
-        this.teacherRepository = teacherRepository;
         this.schoolRepository = schoolRepository;
         this.studentRepository = studentRepository;
         this.eventRepository = eventRepository;
         this.participationRepository = participationRepository;
+        this.teacherRepository = teacherRepository;
     }
 
     public Event getEvent(String eventId) {
@@ -35,14 +36,25 @@ public class EventService {
         return converters.toGraphQLType(eventEntity);
     }
 
+    public List<Participation> getStudentParticipation(String studentId) {
+        List<ParticipationEntity> participationEntities = participationRepository.findAllByStudentId(UUID.fromString(studentId));
+        return participationEntities.stream().map(converters::toGraphQLType).collect(Collectors.toList());
+    }
+
+    public List<Participation> getEventParticipation(String eventId) {
+        List<ParticipationEntity> participationEntities = participationRepository.findAllByEventId(UUID.fromString(eventId));
+        return participationEntities.stream().map(converters::toGraphQLType).collect(Collectors.toList());
+    }
+
+
     public List<Event> getTeacherEvents(String teacherId) {
-        List<EventEntity> events = eventRepository.findAllByTeacherId(UUID.fromString(teacherId));
-        return events.stream().map(converters::toGraphQLType).collect(Collectors.toList());
+        List<EventEntity> eventEntities = eventRepository.findAllByTeacherId(UUID.fromString(teacherId));
+        return eventEntities.stream().map(converters::toGraphQLType).collect(Collectors.toList());
     }
 
     public List<Event> getSchoolEvents(String schoolId) {
-        List<EventEntity> events = eventRepository.findAllBySchoolId(UUID.fromString(schoolId));
-        return events.stream().map(converters::toGraphQLType).collect(Collectors.toList());
+        List<EventEntity> eventEntities = eventRepository.findAllBySchoolId(UUID.fromString(schoolId));
+        return eventEntities.stream().map(converters::toGraphQLType).collect(Collectors.toList());
     }
 
     public Event createEvent(CreateEventInput createEventInput) {
