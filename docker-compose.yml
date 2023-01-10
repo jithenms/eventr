@@ -1,0 +1,32 @@
+version: '3'
+services:
+  event-service:
+    container_name: event-service
+    build:
+      context: ./event-service
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    depends_on:
+      - event-db
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://event-db:5432/eventdb
+      - SPRING_DATASOURCE_USERNAME=eventdb
+      - SPRING_DATASOURCE_PASSWORD=eventdb
+      - FIREBASE_PROJECT_ID=eventr-5570c
+  event-app:
+    container_name: event-app
+    build:
+      context: ./event-app
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    depends_on:
+      - event-service
+  event-db:
+    container_name: event-db
+    image: postgres
+    environment:
+      POSTGRES_DB: eventdb
+      POSTGRES_USER: eventdb
+      POSTGRES_PASSWORD: eventdb

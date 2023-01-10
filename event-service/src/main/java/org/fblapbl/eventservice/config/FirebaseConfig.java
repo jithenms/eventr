@@ -9,8 +9,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 
-import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 
 @ComponentScan
 @Configuration
@@ -20,7 +20,7 @@ public class FirebaseConfig {
 
     @Bean
     FirebaseApp firebaseApp() throws IOException {
-        FileInputStream serviceAccountKey = new FileInputStream("src/main/resources/env/firebase.json");
+        InputStream serviceAccountKey = FirebaseConfig.class.getClassLoader().getResourceAsStream("env/firebase.json");
         FirebaseOptions options = FirebaseOptions.builder()
                 .setCredentials(GoogleCredentials.fromStream(serviceAccountKey))
                 .setProjectId(projectId)

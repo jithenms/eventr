@@ -4,7 +4,6 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthException;
 import com.google.firebase.auth.UserRecord;
 import org.fblapbl.eventservice.graphql.types.UserRole;
-import org.fblapbl.eventservice.repositories.SchoolRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.Map;
@@ -13,11 +12,9 @@ import java.util.UUID;
 @Service
 public class AuthService {
     private final FirebaseAuth firebaseAuth;
-    private final SchoolRepository schoolRepository;
 
-    public AuthService(FirebaseAuth firebaseAuth, SchoolRepository schoolRepository) {
+    public AuthService(FirebaseAuth firebaseAuth) {
         this.firebaseAuth = firebaseAuth;
-        this.schoolRepository = schoolRepository;
     }
 
     public UserRecord createAccount(UUID id, String email, String password, UserRole role) {
