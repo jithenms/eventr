@@ -18,7 +18,7 @@ At the end of each quarter, Eventr generates a report showing the points accumul
 
 3. Once Docker is installed, open a command prompt window (you can search for "cmd" in the Start menu). In the command prompt window, use the "cd" command to navigate to the directory where you extracted the project files. For example, if you extracted the files to your desktop, you would type "cd Desktop/project-files".
 
-4. Once you are in the correct directory, type in the command "docker-compose up" and press Enter. This will start the services for the project. You should see a message indicating that the services are running. You can now access the services on your local machine.
+4. Once you are in the correct directory, type in the command "docker-compose up" and press Enter. This will start the services for the project. You should see a message indicating that the services are running. You can now access the services on your local machine. The GUI should be located at http://localhost:3000.
 
 ### For Mac:
 
@@ -28,4 +28,4 @@ At the end of each quarter, Eventr generates a report showing the points accumul
 
 3. Once Docker is installed, open a terminal window (you can find this in the Applications > Utilities folder). In the terminal window, use the "cd" command to navigate to the directory where you extracted the project files. For example, if you extracted the files to your desktop, you would type "cd Desktop/project-files".
 
-4. Once you are in the correct directory, type in the command "docker-compose up" and press Enter. This will start the services for the project. You should see a message indicating that the services are running. You can now access the services on your local machine.
+4. Once you are in the correct directory, type in the command "docker-compose up" and press Enter. This will start the services for the project. You should see a message indicating that the services are running. You can now access the services on your local machine. The GUI should be located at http://localhost:3000.
