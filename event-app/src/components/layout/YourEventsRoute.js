@@ -6,26 +6,28 @@ import YourEvents from '../../pages/YourEvents';
 import Layout from './Layout';
 
 const YourEventsRoute = () => {
-	const { role, currentUser } = useAuth();
-	console.log(role);
+  // destructures 'role' and 'currentUser' from the 'useAuth' hook
+  const { role, currentUser } = useAuth();
 
-	if (!currentUser) {
-		return <Navigate to='/login' />;
-	}
+  // If there is no current user it redirects user to the '/login' route using 'Navigate' component
+  if (!currentUser) {
+    return <Navigate to="/login" />;
+  }
 
-	if (role === 'student') {
-		return (
-			<Layout>
-				<YourEvents />
-			</Layout>
-		);
-	} else if (role === 'teacher') {
-		return (
-			<Layout>
-				<TeacherYourEvents />
-			</Layout>
-		);
-	}
+  // If the user is a 'student' it returns the Layout component with the students' events else the teachers' events
+  if (role === "student") {
+    return (
+      <Layout>
+        <YourEvents />
+      </Layout>
+    );
+  } else if (role === "teacher") {
+    return (
+      <Layout>
+        <TeacherYourEvents />
+      </Layout>
+    );
+  }
 };
 
 export default YourEventsRoute;

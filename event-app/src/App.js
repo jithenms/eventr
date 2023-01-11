@@ -16,6 +16,7 @@ import StudentRequests from './pages/StudentRequests';
 import HelpPage from './pages/HelpPage';
 import Prizes from './pages/Prizes';
 
+// create graphql client to communicate with backend server
 const client = new ApolloClient({
     uri: 'http://localhost:8080/graphql',
     cache: new InMemoryCache(),
@@ -29,8 +30,13 @@ const client = new ApolloClient({
 
 function App() {
     return (
+      // provide apollo client to all components
       <ApolloProvider client={client}>
+        {/*  provide auth context to all components */}
         <AuthProvider>
+          {/* Uses Routes component to handle routing and render different pages based on the path */}
+          {/* Uses PrivateRoute component to only allow authenticated users to access certain pages */}
+          {/* Includes HomePage, Leaderboard, NewEvent, NewPrize, StudentRequests, Prizes, HelpPage, Login, Register, */}
           <Routes>
             <Route
               path="/"
@@ -65,14 +71,14 @@ function App() {
                 </PrivateRoute>
               }
             />
-              <Route
-                path="/prizes"
-                element={
-                  <PrivateRoute>
-                    <Prizes />
-                  </PrivateRoute>
-                }
-              />
+            <Route
+              path="/prizes"
+              element={
+                <PrivateRoute>
+                  <Prizes />
+                </PrivateRoute>
+              }
+            />
             <Route
               path="/new-prize"
               element={

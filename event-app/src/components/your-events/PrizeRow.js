@@ -6,16 +6,10 @@ function UpcomingEventCard(props) {
         <React.Fragment>
             <TableRow sx={{ '& > *': { borderBottom: 'unset' } }}>
                 <TableCell component="th" scope="row">
-                    Homework Pass
+                    {props?.prize?.name}
                 </TableCell>
-                <TableCell>Randomly Selected</TableCell>
-                <TableCell>
-                    {/* {props.event?.teacher?.firstName}{' '} */}
-                    {/* {props.event?.teacher?.lastName} */}
-                    {/* John Doe */}
-                </TableCell>
-                <TableCell>3</TableCell>
-                <TableCell align="right">01/06/2022</TableCell>
+                <TableCell align='center'>{props?.prize?.pointsRequired} points</TableCell>
+                <TableCell align="right">{props?.prize?.createdAt?.substring(0,10)}</TableCell>
             </TableRow>
         </React.Fragment>
     );
