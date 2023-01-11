@@ -47,7 +47,6 @@ function Header() {
             >
               Leaderboard
             </NavLink>
-            {role === "teacher" && (
               <NavLink
                 to="/prizes"
                 className={({ isActive }) =>
@@ -58,7 +57,6 @@ function Header() {
               >
                 Prizes
               </NavLink>
-            )}
             <NavLink
               to="/your-events"
               className={({ isActive }) =>
