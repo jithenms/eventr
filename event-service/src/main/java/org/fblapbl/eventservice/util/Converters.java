@@ -94,7 +94,9 @@ public class Converters {
         Prize prize = new Prize();
         prize.setId(prizeEntity.getId().toString());
         prize.setName(prizeEntity.getName());
+        prize.setDescription(prizeEntity.getDescription());
         prize.setPointsRequired(prizeEntity.getPointsRequired());
+        prize.setSchool(toGraphQLType(prizeEntity.getSchool()));
         return prize;
     }
 
@@ -148,6 +150,7 @@ public class Converters {
         PrizeEntity prizeEntity = new PrizeEntity();
         prizeEntity.setSchool(schoolEntity);
         prizeEntity.setName(createPrizeInput.getName());
+        prizeEntity.setDescription(createPrizeInput.getDescription());
         prizeEntity.setPointsRequired(createPrizeInput.getPointsRequired());
         return prizeEntity;
     }

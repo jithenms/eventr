@@ -1,20 +1,10 @@
 import { useMutation, useQuery } from '@apollo/client';
 import React from 'react';
-import { GET_STUDENT } from '../../graphql/queries';
 import { ACCEPT_USER, LEAVE_EVENT } from '../../graphql/mutations';
 
 function StudentRequest(props) {
     const { participation, accepted } = props;
     const { eventId } = props;
-
-    const { loading, error, data } = useQuery(GET_STUDENT, {
-        fetchPolicy: 'network-only',
-        variables: {
-            StudentId: participation?.studentId,
-        },
-    });
-
-    console.log(data?.student);
 
     const [acceptEventRequest] = useMutation(ACCEPT_USER);
     const [leaveEvent] = useMutation(LEAVE_EVENT);
@@ -23,9 +13,9 @@ function StudentRequest(props) {
         acceptEventRequest({
             variables: {
                 EventId: eventId,
-                StudentId: data?.student?.id,
+                StudentId: participation?.student?.id,
             },
-            refetchQueries: ['event'],
+            refetchQueries: ['eventParticipation'],
         });
     };
 
@@ -33,7 +23,7 @@ function StudentRequest(props) {
         leaveEvent({
             variables: {
                 EventId: eventId,
-                StudentId: data?.student?.id,
+                StudentId: participation?.student?.id,
             },
             refetchQueries: ['event'],
         });
@@ -46,15 +36,16 @@ function StudentRequest(props) {
                     <img
                         className="object-cover w-full h-full rounded-full"
                         // src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MXx8cmFuZG9tJTIwcGVyc29ufGVufDB8fDB8fA%3D%3D&w=1000&q=80"
-                        src={`https://avatar.oxro.io/avatar.svg?name=${data?.student?.firstName?.toUpperCase()}+${data?.student?.lastName.toUpperCase()}`}
+                        src={`https://avatar.oxro.io/avatar.svg?name=${participation?.student?.firstName?.toUpperCase()}+${participation?.student?.lastName.toUpperCase()}`}
                     />
                 </div>
                 <div className="flex flex-col">
                     <p>
-                        {data?.student?.firstName} {data?.student?.lastName}
+                        {participation?.student?.firstName}{' '}
+                        {participation?.student?.lastName}
                     </p>
                     <p className="text-gray-600 text-sm">
-                        Grade {data?.student?.grade}
+                        Grade {participation?.student?.grade}
                     </p>
                 </div>
             </div>

@@ -9,35 +9,26 @@ import {
 } from '@mui/material';
 import React from 'react';
 import { useAuth } from '../auth/AuthContext';
-import Layout from '../components/layout/Layout';
-import PrizeRow from '../components/your-events/PrizeRow';
 import UpcomingEventCard from '../components/your-events/UpcomingEventCard';
-import {
-    GET_EVENTS_BY_STUDENT,
-    GET_EVENTS_BY_TEACHER,
-} from '../graphql/queries';
+import { STUDENT_PARTICIPATION } from '../graphql/queries';
 
 function YourEvents() {
     const { profile } = useAuth();
 
-    // const { data, loading, error } = useQuery(GET_EVENTS_BY_STUDENT, {
-    //     variables: {
-    //         AuthId: profile?.id,
-    //     },
-    // });
-
-    // if (data) console.log(data);
-
-    const participations = profile?.participations;
+    const { data, loading, error } = useQuery(STUDENT_PARTICIPATION, {
+        variables: {
+            StudentId: profile?.id,
+        },
+    });
 
     return (
-        <div className="mt-10 flex flex-col items-center">
+        <div className="py-8 px-4 mt-10 flex flex-col items-center">
             {/* <h3 class="mt-2 text-3xl sm:text-4xl leading-normal tracking-tight text-gray-900 font-bold">
                     Profile
                 </h3> */}
             <div className="flex items-center justify-between mt-4">
                 <div className="flex items-center gap-3">
-                    <div className="h-16 w-16">
+                    <div className="h-20 w-20">
                         <img
                             className="object-cover w-full h-full rounded-full"
                             // src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MXx8cmFuZG9tJTIwcGVyc29ufGVufDB8fDB8fA%3D%3D&w=1000&q=80"
@@ -48,11 +39,11 @@ function YourEvents() {
                         <p className="text-2xl">
                             {profile?.firstName} {profile?.lastName}
                         </p>
-                        <p className="text-gray-600 text-md">
-                            School code - @{profile?.school?.code}
+                        <p>
+                            {profile?.email} - Student, Grade {profile?.grade}
                         </p>
                         <p className="text-gray-600 text-md">
-                            Student - Grade {profile?.grade}
+                            School code - @{profile?.school?.code}
                         </p>
                     </div>
                 </div>
@@ -99,19 +90,20 @@ function YourEvents() {
                                 </TableRow>
                             </TableHead>
                             <TableBody>
-                                {data?.getStudent?.joinedEvents?.map(
+                                 {data?.getStudent?.joinedEvents?.map(
                                     (event) => (
                                         <PrizeRow event={event} />
                                     ),
-                                )}
+                                )} 
                                 <PrizeRow />
                             </TableBody>
                         </Table>
                     </TableContainer>
                 </div>
             </div> */}
+            <h1 class="mt-12 text-2xl">Event History</h1>
+            <h2>Total points: {profile?.points}</h2>
             <div className="w-11/12 flex flex-col items-center">
-                <h3 class="mt-12 text-2xl">Event History</h3>
                 <div className="mt-4 w-full">
                     <TableContainer className="bg-white border rounded-lg">
                         <Table sx={{ minWidth: 650 }} aria-label="simple table">
@@ -152,11 +144,13 @@ function YourEvents() {
                                 </TableRow>
                             </TableHead>
                             <TableBody>
-                                {participations?.map((participation) => (
-                                    <UpcomingEventCard
-                                        participation={participation}
-                                    />
-                                ))}
+                                {data?.studentParticipation?.map(
+                                    (participation) => (
+                                        <UpcomingEventCard
+                                            participation={participation}
+                                        />
+                                    ),
+                                )}
                             </TableBody>
                         </Table>
                     </TableContainer>

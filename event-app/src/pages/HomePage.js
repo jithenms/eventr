@@ -8,7 +8,7 @@ import { GET_EVENTS } from '../graphql/queries';
 import { useAuth } from '../auth/AuthContext';
 
 function HomePage() {
-    const { profile } = useAuth();
+    const { profile, role } = useAuth();
 
     const { loading, error, data } = useQuery(GET_EVENTS, {
         fetchPolicy: 'network-only',
@@ -20,7 +20,7 @@ function HomePage() {
     if (data) console.log(data);
 
     return (
-        <div className="flex items-center justify-center">
+        <div className="flex flex-col pb-8 items-center">
             <div className="w-8/12">
                 {/* search bar */}
                 <div className="mt-10 w-full flex gap-4">
@@ -34,13 +34,15 @@ function HomePage() {
                             <HiSearch />
                         </button>
                     </div>
-                    <NavLink
-                        to="/new-event"
-                        className="shadow-indigo-600 text-white bg-indigo-600 hover:text-white rounded-2xl p-2 px-3 gap-1 whitespace-nowrap flex items-center justify-center font-semibold shadow transition hover:scale-105 "
-                        // className='text-indigo-600 flex items-center justify-center text-5xl'
-                    >
-                        <BsPlus className="text-3xl mx-0 px-0 " />
-                    </NavLink>
+                    {role === 'teacher' && (
+                        <NavLink
+                            to="/new-event"
+                            className="shadow-indigo-600 text-white bg-indigo-600 hover:text-white rounded-2xl p-2 px-3 gap-1 whitespace-nowrap flex items-center justify-center font-semibold shadow transition hover:scale-105 "
+                            // className='text-indigo-600 flex items-center justify-center text-5xl'
+                        >
+                            <BsPlus className="text-3xl mx-0 px-0 " />
+                        </NavLink>
+                    )}
                 </div>
                 {/* event list */}
                 <div className="mt-5 flex flex-col w-full gap-6">

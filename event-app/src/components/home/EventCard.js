@@ -1,6 +1,6 @@
-import { useMutation } from '@apollo/client';
+import { useMutation, useQuery } from '@apollo/client';
 import moment from 'moment';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import {
     HiOutlineCalendar,
     HiOutlineClock,
@@ -10,26 +10,35 @@ import {
 import { Link } from 'react-router-dom';
 import { useAuth } from '../../auth/AuthContext';
 import { JOIN_EVENT, LEAVE_EVENT } from '../../graphql/mutations';
+import { EVENT_PARTICIPATION } from '../../graphql/queries';
 
 function EventCard(props) {
     const [checked, setChecked] = useState(false);
 
     const { profile, role } = useAuth();
 
-    console.log(role);
+    const [joinEvent] = useMutation(JOIN_EVENT);
+    const [leaveEvent] = useMutation(LEAVE_EVENT);
 
-    const [joinEvent, { data, loading, error }] = useMutation(JOIN_EVENT);
-    const [leaveEvent, { leaveData, leaveLoading, leaveError }] =
-        useMutation(LEAVE_EVENT);
+    const { data, loading, error } = useQuery(EVENT_PARTICIPATION, {
+        variables: {
+            EventId: props?.event?.id,
+        },
+    });
 
-    useEffect(() => {
-        for (var i = 0; i < props?.event?.participations.length; i++) {
-            if (props?.event?.participations[i]?.studentId === profile?.id) {
-                setChecked(true);
-                break;
+    function check() {
+        if (checked) {
+            return true;
+        } else {
+            for (var i = 0; i < data?.eventParticipation?.length; i++) {
+                console.log(data?.eventParticipation[i].student?.id);
+                if (data?.eventParticipation[i]?.student?.id === profile?.id) {
+                    return true;
+                }
             }
         }
-    }, []);
+        return false;
+    }
 
     const handleSignUp = () => {
         joinEvent({
@@ -37,7 +46,7 @@ function EventCard(props) {
                 EventId: props?.event?.id,
                 StudentId: profile?.id,
             },
-            refetchQueries: ['schoolEvents'],
+            refetchQueries: ['eventParticipation'],
         });
         setChecked(true);
     };
@@ -48,7 +57,7 @@ function EventCard(props) {
                 EventId: props?.event?.id,
                 StudentId: profile?.id,
             },
-            refetchQueries: ['schoolEvents'],
+            refetchQueries: ['eventParticipation'],
         });
         setChecked(false);
     };
@@ -83,6 +92,10 @@ function EventCard(props) {
                 <div className="flex gap-4">
                     <div className="flex items-center gap-2 shadow rounded-lg px-4 py-2">
                         {/* <p>03-02-22</p> */}
+                        <p>Quarter {props?.event?.quarter}</p>
+                    </div>
+                    <div className="flex items-center gap-2 shadow rounded-lg px-4 py-2">
+                        {/* <p>03-02-22</p> */}
                         <p>{props?.event?.date.substring(0, 10)}</p>
                         <HiOutlineCalendar />
                     </div>
@@ -108,7 +121,7 @@ function EventCard(props) {
             {/* Sign up buttons */}
             <div className="mt-6 flex w-full items-center justify-between">
                 {role == 'student' ? (
-                    checked ? (
+                    check() ? (
                         <button
                             className="flex bg-indigo-600 hover:bg-gray-700 text-white hover:border-gray-300 transition-colors duration-300 border border-gray-200 items-center px-3.5 py-1.5 gap-3 rounded-lg"
                             onClick={handleLeaveEvent}
@@ -125,15 +138,17 @@ function EventCard(props) {
                             <p className="text-gray-700">Sign Up</p>
                         </button>
                     )
-                ) : (
+                ) : props?.event?.teacher?.id == profile?.id ? (
                     <Link to={`/requests/${props?.event?.id}`}>
                         <button className="flex bg-[#f9f9f9] hover:bg-gray-200 hover:border-gray-300 transition-colors duration-300 border border-gray-200 items-center px-3.5 py-1.5 gap-3 rounded-lg">
                             <p className="text-gray-700">View Student List</p>
                         </button>
                     </Link>
+                ) : (
+                    <div />
                 )}
                 <p className="text-gray-500">
-                    {props?.event?.participations?.length} Signed Up
+                    {data?.eventParticipation?.length} Signed Up
                 </p>
             </div>
         </div>

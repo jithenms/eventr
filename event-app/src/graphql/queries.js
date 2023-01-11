@@ -1,7 +1,42 @@
 import { gql } from 'apollo-boost';
 
+export const STUDENT_PARTICIPATION = gql`
+    query studentParticipation($StudentId: String!) {
+        studentParticipation(studentId: $StudentId) {
+            id
+            event {
+                id
+                title
+                points
+                date
+                quarter
+                teacher {
+                    firstName
+                    lastName
+                }
+            }
+            status
+        }
+    }
+`;
+
+export const EVENT_PARTICIPATION = gql`
+    query eventParticipation($EventId: String!) {
+        eventParticipation(eventId: $EventId) {
+            id
+            student {
+                id
+                firstName
+                lastName
+                email
+            }
+            status
+        }
+    }
+`;
+
 export const GET_EVENTS = gql`
-    query schoolEvents($SchoolId: String) {
+    query schoolEvents($SchoolId: String!) {
         schoolEvents(schoolId: $SchoolId) {
             id
             title
@@ -9,33 +44,23 @@ export const GET_EVENTS = gql`
             points
             quarter
             teacher {
+                id
                 firstName
                 lastName
             }
             date
             time
-            participations {
-                id
-                status
-                studentId
-            }
             createdAt
         }
     }
 `;
 
 export const GET_EVENT = gql`
-    query event($EventId: String) {
+    query event($EventId: String!) {
         event(eventId: $EventId) {
             id
             title
             quarter
-            participations {
-                id
-                studentId
-                status
-                eventId
-            }
             date
             teacher {
                 firstName
@@ -47,7 +72,7 @@ export const GET_EVENT = gql`
 `;
 
 export const GET_TEACHER = gql`
-    query teacher($TeacherId: String) {
+    query teacher($TeacherId: String!) {
         teacher(teacherId: $TeacherId) {
             id
             firstName
@@ -63,7 +88,7 @@ export const GET_TEACHER = gql`
 `;
 
 export const GET_STUDENT = gql`
-    query student($StudentId: String) {
+    query student($StudentId: String!) {
         student(studentId: $StudentId) {
             id
             firstName
@@ -80,48 +105,12 @@ export const GET_STUDENT = gql`
                 name
                 code
             }
-            participations {
-                id
-                status
-                eventId
-                studentId
-            }
-        }
-    }
-`;
-
-export const GET_EVENTS_BY_STUDENT = gql`
-    query getStudent($AuthId: String) {
-        getStudent(authId: $AuthId) {
-            firstName
-            lastName
-            grade
-            joinedEvents {
-                id
-                title
-                date
-                teacher {
-                    firstName
-                    lastName
-                }
-                points
-            }
-            requestedEvents {
-                id
-                title
-                date
-                teacher {
-                    firstName
-                    lastName
-                }
-                points
-            }
         }
     }
 `;
 
 export const TEACHER_EVENTS = gql`
-    query teacherEvents($TeacherId: String) {
+    query teacherEvents($TeacherId: String!) {
         teacherEvents(teacherId: $TeacherId) {
             id
             title
@@ -129,11 +118,6 @@ export const TEACHER_EVENTS = gql`
             createdAt
             points
             quarter
-            participations {
-                id
-                status
-                studentId
-            }
         }
     }
 `;
@@ -150,12 +134,27 @@ export const GET_LEADERBOARD = gql`
             q2points
             q3points
             q4points
-            participations {
-                id
-                status
-                studentId
-                eventId
-            }
+        }
+    }
+`;
+
+export const SCHOOL_PRIZES = gql`
+    query schoolPrizes($SchoolId: String!) {
+        schoolPrizes(schoolId: $SchoolId) {
+            id
+            name
+            description
+            pointsRequired
+        }
+    }
+`;
+
+export const STUDENT_PRIZES = gql`
+    query studentPrizes($StudentId: String!) {
+        studentPrizes(studentId: $StudentId) {
+            id
+            name
+            pointsRequired
         }
     }
 `;

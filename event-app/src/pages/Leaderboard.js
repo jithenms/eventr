@@ -23,7 +23,7 @@ function Leaderboard() {
     const [prizeOpen, setPrizeOpen] = useState(false);
     const [reason, setReason] = useState('random');
 
-    const { profile } = useAuth();
+    const { profile, role } = useAuth();
 
     function handleGetRandom() {
         const randomRowIndex = Math.floor(
@@ -80,7 +80,7 @@ function Leaderboard() {
         <div className="flex flex-col h-screen items-center">
             {open && (
                 <div className="absolute z-20 bg-white mt-32 py-8 px-4 rounded-lg flex flex-col items-center">
-                    <h3 className="text-2xl font-bold">Random Winner:</h3>
+                    <h3 className="text-2xl">Random Winner:</h3>
                     <TableContainer className="bg-white border rounded-lg mt-8">
                         <Table sx={{ minWidth: 650 }} aria-label="simple table">
                             <TableHead>
@@ -120,6 +120,7 @@ function Leaderboard() {
                                     user={random}
                                     timeframe={timeframe}
                                     ranking={random?.ranking}
+                                    hide={true}
                                 />
                             </TableBody>
                         </Table>
@@ -212,43 +213,47 @@ function Leaderboard() {
                     </div>
                 </div>
             )}
-            <h3 class="mt-12 text-3xl sm:text-4xl leading-normal tracking-tight text-gray-900 font-bold">
+            <h3 class="mt-12 text-3xl sm:text-4xl leading-normal tracking-tight text-gray-900">
                 Student Leaderboard
             </h3>
             <div className="w-11/12 mt-8">
-                <div className="flex items-center justify-between w-full">
-                    <div className="flex items-center gap-2">
-                        <p>Timeframe:</p>
-                        <Select
-                            value={timeframe}
-                            onChange={(e) => setTimeframe(e.target.value)}
-                        >
-                            <MenuItem value={0}>All time</MenuItem>
-                            <MenuItem value={1}>Quarter 1</MenuItem>
-                            <MenuItem value={2}>Quarter 2</MenuItem>
-                            <MenuItem value={3}>Quarter 3</MenuItem>
-                            <MenuItem value={4}>Quarter 4</MenuItem>
-                        </Select>
+                <div className="flex items-center justify-between">
+                    <div className="flex items-center justify-start gap-8 w-full">
+                        <div className="flex items-center gap-2">
+                            <p>Timeframe:</p>
+                            <Select
+                                value={timeframe}
+                                onChange={(e) => setTimeframe(e.target.value)}
+                            >
+                                <MenuItem value={0}>All time</MenuItem>
+                                <MenuItem value={1}>Quarter 1</MenuItem>
+                                <MenuItem value={2}>Quarter 2</MenuItem>
+                                <MenuItem value={3}>Quarter 3</MenuItem>
+                                <MenuItem value={4}>Quarter 4</MenuItem>
+                            </Select>
+                        </div>
+                        <div className="flex items-center gap-2">
+                            <p>Grade:</p>
+                            <Select
+                                value={sortOption}
+                                onChange={(e) => setSortOption(e.target.value)}
+                            >
+                                <MenuItem value={'all'}>All Grades</MenuItem>
+                                <MenuItem value={9}>Grade 9</MenuItem>
+                                <MenuItem value={10}>Grade 10</MenuItem>
+                                <MenuItem value={11}>Grade 11</MenuItem>
+                                <MenuItem value={12}>Grade 12</MenuItem>
+                            </Select>
+                        </div>
                     </div>
-                    <div className="flex items-center gap-2">
-                        <p>Grade:</p>
-                        <Select
-                            value={sortOption}
-                            onChange={(e) => setSortOption(e.target.value)}
+                    {role === 'teacher' && (
+                        <button
+                            onClick={handleGetRandom}
+                            className="bg-indigo-600 flex-shrink-0 text-center py-4 px-8 rounded text-white hover:bg-indigo-700 focus:outline-none"
                         >
-                            <MenuItem value={'all'}>All Grades</MenuItem>
-                            <MenuItem value={9}>Grade 9</MenuItem>
-                            <MenuItem value={10}>Grade 10</MenuItem>
-                            <MenuItem value={11}>Grade 11</MenuItem>
-                            <MenuItem value={12}>Grade 12</MenuItem>
-                        </Select>
-                    </div>
-                    <button
-                        onClick={handleGetRandom}
-                        className="bg-indigo-600 text-center py-4 px-8 rounded text-white hover:bg-indigo-700 focus:outline-none"
-                    >
-                        Choose Random
-                    </button>
+                            Generate Random Winner
+                        </button>
+                    )}
                 </div>
                 <TableContainer className="bg-white border rounded-lg mt-8">
                     <Table sx={{ minWidth: 650 }} aria-label="simple table">

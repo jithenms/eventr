@@ -22,6 +22,7 @@ function TeacherYourEvents() {
     });
 
     if (data) console.log(data?.teacherEvents);
+    if (error) console.log(error);
 
     return (
         <div className="mt-10 flex flex-col items-center">
@@ -38,11 +39,12 @@ function TeacherYourEvents() {
                         <p className="text-2xl">
                             {profile?.firstName} {profile?.lastName}
                         </p>
-                        <p className="text-gray-600 text-md">
-                            School code - @{profile?.school?.code}
+                        <p>
+                            {profile?.email} - Teacher,{' '}
+                            {data?.teacherEvents?.length} events
                         </p>
                         <p className="text-gray-600 text-md">
-                            Teacher - {data?.teacherEvents?.length} events
+                            School code - @{profile?.school?.code}
                         </p>
                     </div>
                 </div>
