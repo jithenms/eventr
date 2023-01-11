@@ -17,6 +17,7 @@ function RegisterStudent() {
         email: '',
         password: '',
         confirmPassword: '',
+        grade: 9
     };
 
     const validate = (values) => {
@@ -189,7 +190,7 @@ function RegisterStudent() {
                                         onBlur={handleBlur}
                                         class="block border border-grey-light w-full p-3 rounded mt-4 outline-none"
                                     >
-                                        <option defaultValue={null} disabled>
+                                        <option defaultValue={9} disabled>
                                             Choose your grade
                                         </option>
                                         <option value={9}>Grade 9</option>

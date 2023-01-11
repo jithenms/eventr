@@ -7,7 +7,7 @@ import Login from './pages/Login';
 import NewEvent from './pages/NewEvent';
 import NewPrize from './pages/NewPrize';
 import { ApolloProvider, InMemoryCache, ApolloClient } from '@apollo/client';
-import { AuthProvider } from './auth/AuthContext';
+import { AuthProvider, useAuth } from './auth/AuthContext';
 import PrivateRoute from './components/layout/PrivateRoute';
 import RegisterStudent from './pages/RegisterStudent';
 import RegisterTeacher from './pages/RegisterTeacher';
@@ -29,72 +29,66 @@ const client = new ApolloClient({
 
 function App() {
     return (
-        <ApolloProvider client={client}>
-            <AuthProvider>
-                <Routes>
-                    <Route
-                        path="/"
-                        element={
-                            <PrivateRoute>
-                                <HomePage />
-                            </PrivateRoute>
-                        }
-                    />
-                    <Route
-                        path="/leaderboard"
-                        element={
-                            <PrivateRoute>
-                                <Leaderboard />
-                            </PrivateRoute>
-                        }
-                    />
-                    <Route path="/your-events" element={<YourEventsRoute />} />
-                    <Route
-                        path="/new-event"
-                        element={
-                            <PrivateRoute>
-                                <NewEvent />
-                            </PrivateRoute>
-                        }
-                    />
-                    <Route
-                        path="/requests/:id"
-                        element={
-                            <PrivateRoute>
-                                <StudentRequests />
-                            </PrivateRoute>
-                        }
-                    />
-                    <Route
-                        path="/prizes"
-                        element={
-                            <PrivateRoute>
-                                <Prizes />
-                            </PrivateRoute>
-                        }
-                    />
-                    <Route
-                        path="/new-prize"
-                        element={
-                            <PrivateRoute>
-                                <NewPrize />
-                            </PrivateRoute>
-                        }
-                    />
-                    <Route path="/login" element={<Login />} />
-                    <Route path="/register" element={<Register />} />
-                    <Route path="/help" element={<HelpPage />} />
-                    <Route
-                        path="/register-student"
-                        element={<RegisterStudent />}
-                    />
-                    <Route
-                        path="/register-teacher"
-                        element={<RegisterTeacher />}
-                    />
-                </Routes>
-            </AuthProvider>
-        </ApolloProvider>
+      <ApolloProvider client={client}>
+        <AuthProvider>
+          <Routes>
+            <Route
+              path="/"
+              element={
+                <PrivateRoute>
+                  <HomePage />
+                </PrivateRoute>
+              }
+            />
+            <Route
+              path="/leaderboard"
+              element={
+                <PrivateRoute>
+                  <Leaderboard />
+                </PrivateRoute>
+              }
+            />
+            <Route path="/your-events" element={<YourEventsRoute />} />
+            <Route
+              path="/new-event"
+              element={
+                <PrivateRoute>
+                  <NewEvent />
+                </PrivateRoute>
+              }
+            />
+            <Route
+              path="/requests/:id"
+              element={
+                <PrivateRoute>
+                  <StudentRequests />
+                </PrivateRoute>
+              }
+            />
+              <Route
+                path="/prizes"
+                element={
+                  <PrivateRoute>
+                    <Prizes />
+                  </PrivateRoute>
+                }
+              />
+            <Route
+              path="/new-prize"
+              element={
+                <PrivateRoute>
+                  <NewPrize />
+                </PrivateRoute>
+              }
+            />
+            <Route path="/login" element={<Login />} />
+            <Route path="/register" element={<Register />} />
+            <Route path="/help" element={<HelpPage />} />
+            <Route path="/register-student" element={<RegisterStudent />} />
+            <Route path="/register-teacher" element={<RegisterTeacher />} />
+          </Routes>
+        </AuthProvider>
+      </ApolloProvider>
     );
 }
 

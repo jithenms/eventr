@@ -8,7 +8,7 @@ function StudentRequest(props) {
 
     const [acceptEventRequest] = useMutation(ACCEPT_USER);
     const [leaveEvent] = useMutation(LEAVE_EVENT);
-
+    
     const handleAccept = () => {
         acceptEventRequest({
             variables: {
@@ -21,22 +21,23 @@ function StudentRequest(props) {
 
     const handleDeny = () => {
         leaveEvent({
-            variables: {
-                EventId: eventId,
-                StudentId: participation?.student?.id,
-            },
-            refetchQueries: ['event'],
+          variables: {
+            EventId: eventId,
+            StudentId: participation?.student?.id,
+          },
+          refetchQueries: ["eventParticipation"],
         });
     };
 
     return (
-        <div className="flex items-center justify-between mt-4">
+        <div className="flex items-center justify-between mt-4 w-full">
             <div className="flex items-center gap-3">
                 <div className="h-12 w-12">
                     <img
                         className="object-cover w-full h-full rounded-full"
                         // src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MXx8cmFuZG9tJTIwcGVyc29ufGVufDB8fDB8fA%3D%3D&w=1000&q=80"
                         src={`https://avatar.oxro.io/avatar.svg?name=${participation?.student?.firstName?.toUpperCase()}+${participation?.student?.lastName.toUpperCase()}`}
+                        alt='avatar'
                     />
                 </div>
                 <div className="flex flex-col">

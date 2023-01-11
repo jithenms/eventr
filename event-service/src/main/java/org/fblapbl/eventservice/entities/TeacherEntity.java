@@ -1,9 +1,6 @@
 package org.fblapbl.eventservice.entities;
 
-import org.fblapbl.eventservice.graphql.types.Event;
-
 import javax.persistence.*;
-import java.util.List;
 
 @Entity
 @Table(name = "teacher")

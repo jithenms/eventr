@@ -34,7 +34,6 @@ function StudentRequests() {
                         Otherwise, the event will be removed from their history.
                     </p>
                 </div>
-                {/* TODO: Make profiles! */}
                 <div className="flex items-start justify-between mt-8">
                     <div className="bg-white flex flex-col items-center border rounded-lg px-4 py-4">
                         <h2 className="text-xl">Student Requests</h2>
