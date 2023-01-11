@@ -54,10 +54,26 @@ export const ACCEPT_USER = gql`
     mutation acceptEventRequest($EventId: String!, $StudentId: String!) {
         acceptEventRequest(eventId: $EventId, studentId: $StudentId) {
             id
-            participations {
-                id
-                status
-            }
+        }
+    }
+`;
+
+export const CREATE_PRIZE = gql`
+    mutation createPrize($CreatePrizeInput: CreatePrizeInput!) {
+        createPrize(createPrizeInput: $CreatePrizeInput) {
+            id
+            name
+            pointsRequired
+        }
+    }
+`;
+
+export const REDEEM_PRIZE = gql`
+    mutation redeemPrize($PrizeId: String!, $StudentId: String!) {
+        redeemPrize(prizeId: $PrizeId, studentId: $StudentId) {
+            id
+            name
+            pointsRequired
         }
     }
 `;

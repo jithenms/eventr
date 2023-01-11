@@ -5,6 +5,7 @@ import Leaderboard from './pages/Leaderboard';
 import Register from './pages/Register';
 import Login from './pages/Login';
 import NewEvent from './pages/NewEvent';
+import NewPrize from './pages/NewPrize';
 import { ApolloProvider, InMemoryCache, ApolloClient } from '@apollo/client';
 import { AuthProvider } from './auth/AuthContext';
 import PrivateRoute from './components/layout/PrivateRoute';
@@ -13,6 +14,7 @@ import RegisterTeacher from './pages/RegisterTeacher';
 import YourEventsRoute from './components/layout/YourEventsRoute';
 import StudentRequests from './pages/StudentRequests';
 import HelpPage from './pages/HelpPage';
+import Prizes from './pages/Prizes';
 
 const client = new ApolloClient({
     uri: 'http://localhost:8080/graphql',
@@ -60,6 +62,22 @@ function App() {
                         element={
                             <PrivateRoute>
                                 <StudentRequests />
+                            </PrivateRoute>
+                        }
+                    />
+                    <Route
+                        path="/prizes"
+                        element={
+                            <PrivateRoute>
+                                <Prizes />
+                            </PrivateRoute>
+                        }
+                    />
+                    <Route
+                        path="/new-prize"
+                        element={
+                            <PrivateRoute>
+                                <NewPrize />
                             </PrivateRoute>
                         }
                     />

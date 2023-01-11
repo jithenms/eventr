@@ -10,6 +10,6 @@ import java.util.UUID;
 
 @Repository
 public interface PrizeRepository extends JpaRepository<PrizeEntity, UUID> {
-    @Query(nativeQuery = true, value = "SELECT * FROM prize p WHERE p.school_id = :schoolId")
+    @Query(nativeQuery = true, value = "SELECT * FROM prize p WHERE p.school_id = :schoolId ORDER BY p.points_required")
     List<PrizeEntity> findAllBySchoolId(UUID schoolId);
 }

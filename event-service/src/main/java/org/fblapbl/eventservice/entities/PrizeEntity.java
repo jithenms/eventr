@@ -10,6 +10,9 @@ public class PrizeEntity extends BaseEntity {
     @Column(name = "name")
     private String name;
 
+    @Column(name = "description")
+    private String description;
+
     @Column(name = "points_required")
     private Integer pointsRequired;
 
@@ -18,6 +21,15 @@ public class PrizeEntity extends BaseEntity {
     private SchoolEntity school;
 
     public PrizeEntity() {
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public PrizeEntity setDescription(String description) {
+        this.description = description;
+        return this;
     }
 
     public String getName() {

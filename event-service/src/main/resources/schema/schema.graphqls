@@ -61,6 +61,7 @@ input CreateEventInput {
 input CreatePrizeInput {
     schoolId: String
     name: String
+    description: String
     pointsRequired: Int
 }
 
@@ -126,6 +127,7 @@ type Prize {
     id: String
     school: School
     name: String
+    description: String
     pointsRequired: Int
 }
 
