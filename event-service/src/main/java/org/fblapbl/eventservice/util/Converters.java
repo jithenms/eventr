@@ -97,6 +97,7 @@ public class Converters {
         prize.setDescription(prizeEntity.getDescription());
         prize.setPointsRequired(prizeEntity.getPointsRequired());
         prize.setSchool(toGraphQLType(prizeEntity.getSchool()));
+        prize.setCreatedAt(prizeEntity.getCreatedAt().toString());
         return prize;
     }
 

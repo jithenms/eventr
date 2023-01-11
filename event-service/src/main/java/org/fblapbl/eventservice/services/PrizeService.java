@@ -63,4 +63,12 @@ public class PrizeService {
         List<StudentPrizeEntity> studentPrizeEntities = studentPrizeRepository.findAllByStudentId(UUID.fromString(studentId));
         return studentPrizeEntities.stream().map((rec) -> converters.toGraphQLType(rec.getPrize())).collect(Collectors.toList());
     }
+
+    public Prize givePrize(String prizeId, String studentId) {
+        StudentEntity studentEntity = studentRepository.findById(UUID.fromString(studentId)).orElseThrow();
+        PrizeEntity prizeEntity = prizeRepository.findById(UUID.fromString(prizeId)).orElseThrow();
+        StudentPrizeEntity studentPrizeEntity = converters.toEntity(studentEntity, prizeEntity);
+        studentPrizeRepository.save(studentPrizeEntity);
+        return converters.toGraphQLType(prizeEntity);
+    }
 }

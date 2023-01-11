@@ -18,6 +18,11 @@ public class PrizeDataFetcher {
         this.prizeService = prizeService;
     }
 
+    @DgsMutation
+    public Prize givePrize(@InputArgument String prizeId, @InputArgument String studentId) {
+        return prizeService.givePrize(prizeId, studentId);
+    }
+
     @DgsQuery
     public List<Prize> schoolPrizes(@InputArgument String schoolId) {
         return prizeService.getSchoolPrizes(schoolId);
