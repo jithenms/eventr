@@ -2,11 +2,13 @@
 
 ## Description
 
-Eventr is an app that aims to increase student engagement and participation in school events. When students attend or participate in these events, they earn points that can be redeemed for prizes like a school reward, a food reward, and a school spirit item. The more points a student has, the bigger the prize they can get.
+Eventr is an app designed to encourage student participation in school events by rewarding them with points for attending events. They can redeem these points for prizes.
 
-The user interface of Eventr was built using React Electron, which allows for the creation of desktop GUI applications. Electron is a popular technology that is also used by well-known companies like Slack, Spotify, and Discord. The backend of the app, which handles data and communication between the frontend and the database, was built using Java and Spring Boot. Spring Boot is a widely-used framework used by companies like Netflix, Uber, and Google that makes it easy to create standalone, production-grade server-side applications. It's known for its simplicity and flexibility, making it a great choice for Eventr's backend. The API (Application Programming Interface), or the way that different parts of the app communicate with each other, was implemented using GraphQL, a flexible and efficient way of querying and mutating data. The data for the app is stored in a PostgreSQL database, which is a powerful and reliable tool for organizing and storing relational data.
+We built the user interface with React, a JavaScript framework created by Facebook. React allows for the construction of user interfaces through the use of reusable components, resulting in more efficient and easily maintainable code.
 
-At the end of each quarter, Eventr generates a report showing the points accumulated by each student in each grade. It also includes a feature to randomly select a winner from each grade level, as well as the student with the highest number of points. The app has a user-friendly GUI with various control types, such as drop-down lists, text fields, and checkboxes, and all data entry is validated with user notification and error messages.
+To handle communication between the frontend and the database, we built a GraphQL API with Java and Spring Boot. Spring Boot is a widely-used framework by companies like Netflix, Uber, and Google known for its simplicity and flexibility with minimal configuration.
+
+To store and effectively organize all data in a persistent manner we used PostgreSQL, a robust and reliable database management system for storing relational data.
 
 ## How to Run
 
