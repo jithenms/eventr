@@ -14,7 +14,7 @@ To store and effectively organize all data in a persistent manner we used Postgr
 
 ### For Windows:
 
-1. Select the zip file in the Google drive folder, right-click and choose "Download", then unzip the file when the download is complete to access the project files.
+1. Clone this repository
 
 2. Open a web browser and go to the Docker website (https://www.docker.com/). On the Docker homepage, click on the "Get Docker" button. On the next page, click on the "Download" button for "Docker Desktop for Windows". Follow the prompts to install Docker on your computer.
 
@@ -24,7 +24,7 @@ To store and effectively organize all data in a persistent manner we used Postgr
 
 ### For Mac:
 
-1. Select the zip file in the Google drive folder, right-click and choose "Download", then unzip the file when the download is complete to access the project files.
+1. Clone this repository
 
 2. Open a web browser and go to the Docker website (https://www.docker.com/). On the Docker homepage, click on the "Get Docker" button. On the next page, click on the "Download" button for "Docker Desktop for Mac". Follow the prompts to install Docker on your computer.
 
